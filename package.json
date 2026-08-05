@@ -16,6 +16,14 @@
   },
   "license": "MIT",
   "main": "./lib/main",
+  "files": [
+    "assets",
+    "keymaps",
+    "lib",
+    "menus",
+    "spec",
+    "styles"
+  ],
   "engines": {
     "lumine": "^1.0.0",
     "node": ">=12"
