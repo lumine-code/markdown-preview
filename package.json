@@ -143,17 +143,17 @@
     "MarkdownPreviewView": "createMarkdownPreviewView"
   },
   "dependencies": {
-    "dedent": "^1.7.2",
-    "dompurify": "^3.4.12",
-    "emoji-images": "^0.1.1",
     "@lumine-code/fs-plus": "github:lumine-code/fs-plus#94566356cd8b77123d71fac024e63bff7cec434b",
-    "github-markdown-css": "^5.5.1",
+    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#91bdb6152d7b3f86f198917707e258af5470db9f",
+    "dedent": "^1.7.2",
+    "dompurify": "^3.4.13",
+    "emoji-images": "^0.1.1",
+    "github-markdown-css": "^5.9.0",
     "github-slugger": "^2.0.0",
-    "innertext": "^1.0.1",
-    "marked": "18.0.9",
     "gray-matter": "^4.0.3",
-    "morphdom": "^2.7.2",
-    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#91bdb6152d7b3f86f198917707e258af5470db9f"
+    "innertext": "^1.0.3",
+    "marked": "18.0.9",
+    "morphdom": "^2.7.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -161,7 +161,7 @@
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.2.2",
-    "globals": "^17.7.0",
+    "globals": "^17.9.0",
     "prettier": "^3.9.6"
   }
 }
