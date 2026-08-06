@@ -26,7 +26,7 @@
   ],
   "engines": {
     "lumine": "^1.0.0",
-    "node": ">=12"
+    "node": ">=24"
   },
   "backgroundTips": [
     "You can open a live preview of the Markdown file you are editing with {{ 'markdown-preview:toggle' | keystroke }}"
