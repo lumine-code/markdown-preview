@@ -143,8 +143,8 @@
     "MarkdownPreviewView": "createMarkdownPreviewView"
   },
   "dependencies": {
-    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#94566356cd8b77123d71fac024e63bff7cec434b",
-    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#91bdb6152d7b3f86f198917707e258af5470db9f",
+    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#dbede762a7a1019a024d8f8c8de5e4f04ef2bd78",
+    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#3187fd4c2dd47f50044efe51deb7c662ddac437c",
     "dedent": "^1.7.2",
     "dompurify": "^3.4.13",
     "emoji-images": "^0.1.1",
@@ -157,7 +157,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@lumine-code/temp": "github:lumine-code/node-temp#150772eb009638e11ed741bf8548aa74c8e5dd1c",
+    "@lumine-code/temp": "github:lumine-code/node-temp#a748fd9e43448ac95e8f2c6275b5da6e50cd4d87",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.2.2",
