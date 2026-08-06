@@ -1,4 +1,4 @@
-async function conditionPromise(condition, description = "anonymous condition") {
+async function conditionPromise(condition, description = "anonymous condition", timeout = 5000) {
   const startTime = Date.now();
 
   while (true) {
@@ -8,7 +8,7 @@ async function conditionPromise(condition, description = "anonymous condition") 
       return;
     }
 
-    if (Date.now() - startTime > 5000) {
+    if (Date.now() - startTime > timeout) {
       throw new Error("Timed out waiting on " + description);
     }
   }

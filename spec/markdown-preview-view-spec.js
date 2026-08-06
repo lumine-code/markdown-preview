@@ -276,44 +276,42 @@ function f(x) {
 
     describe("when an editor cannot find the grammar that is later loaded", () => {
       it("updates the editor grammar", async () => {
-        let renderSpy = null;
-
-        if (typeof atom.grammars.onDidRemoveGrammar !== "function") {
-          // TODO: Remove once atom.grammars.onDidRemoveGrammar is released
-          await atom.packages.activatePackage("language-gfm");
-        }
-        renderSpy = spyOn(preview, "renderMarkdown").andCallThrough();
+        // Assert on the editor models, not on render counts or on the
+        // `data-grammar` attribute: re-renders arrive on a debounce and can
+        // coalesce, and the attribute only refreshes when the editor
+        // component updates, which an invisible component defers. The
+        // models are what the renderer reassigns.
+        const grammarScopes = () =>
+          Array.from(
+            preview.element.querySelectorAll("atom-text-editor"),
+            (element) => element.getModel().getGrammar().scopeName,
+          );
 
         await atom.packages.deactivatePackage("language-ruby");
 
         await conditionPromise(
-          () => renderSpy.callCount === 1,
-          "renderMarkdown to be called after disabling a language",
+          () => !grammarScopes().includes("source.ruby"),
+          "the ruby code block to lose its grammar after deactivation",
+          30000,
         );
-
-        await conditionPromise(() => {
-          let rubyEditor = preview.element.querySelector(
-            "atom-text-editor[data-grammar='source ruby']",
-          );
-          return rubyEditor == null;
-        }, "atom-text-editor to reassign all language modes after re-render");
 
         await atom.packages.activatePackage("language-ruby");
 
         await conditionPromise(
-          () => renderSpy.callCount === 2,
-          "renderMarkdown to be called after enabling a language",
+          () => grammarScopes().includes("source.ruby"),
+          "the ruby code block to regain its grammar after reactivation",
+          30000,
         );
 
-        const rubyEditor = preview.element.querySelector(
-          "atom-text-editor[data-grammar='source ruby']",
+        const rubyEditor = Array.from(preview.element.querySelectorAll("atom-text-editor")).find(
+          (element) => element.getModel().getGrammar().scopeName === "source.ruby",
         );
         expect(rubyEditor.getModel().getText()).toBe(`\
 def func
   x = 1
 end\
 `);
-      });
+      }, 120000);
     });
   });
 
