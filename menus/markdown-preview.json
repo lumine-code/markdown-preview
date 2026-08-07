@@ -26,30 +26,54 @@
   "context-menu": {
     ".markdown-preview": [
       {
+        "type": "separator"
+      },
+      {
         "label": "Select All",
         "command": "markdown-preview:select-all"
       },
       {
         "label": "Save As HTML\u2026",
         "command": "core:save-as"
+      },
+      {
+        "type": "separator"
       }
     ],
     ".markdown-preview.has-selection": [
       {
+        "type": "separator"
+      },
+      {
         "label": "Copy",
         "command": "core:copy"
+      },
+      {
+        "type": "separator"
       }
     ],
     ".markdown-preview:not(.has-selection)": [
       {
+        "type": "separator"
+      },
+      {
         "label": "Copy As HTML",
         "command": "core:copy"
+      },
+      {
+        "type": "separator"
       }
     ],
     ".tree-view .file[data-name$=\".markdown\"], .tree-view .file[data-name$=\".md\"], .tree-view .file[data-name$=\".mdown\"], .tree-view .file[data-name$=\".mkd\"], .tree-view .file[data-name$=\".mkdown\"], .tree-view .file[data-name$=\".ron\"], .tree-view .file[data-name$=\".txt\"]": [
       {
+        "type": "separator"
+      },
+      {
         "label": "Markdown Preview",
         "command": "markdown-preview:preview-file"
+      },
+      {
+        "type": "separator"
       }
     ]
   }
