@@ -33,7 +33,7 @@
         "command": "markdown-preview:select-all"
       },
       {
-        "label": "Save As HTML\u2026",
+        "label": "Save As HTML…",
         "command": "core:save-as"
       },
       {
