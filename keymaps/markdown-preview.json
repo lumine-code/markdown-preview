@@ -1,5 +1,7 @@
 {
-  "atom-text-editor": {
+  // :not([mini]) because it previews the file, and a mini editor has none —
+  // from a find field it opened a preview of the file behind the dialog.
+  "atom-text-editor:not([mini])": {
     "ctrl-shift-m": "markdown-preview:toggle"
   },
   ".markdown-preview": {
