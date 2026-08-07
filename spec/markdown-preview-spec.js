@@ -400,38 +400,38 @@ describe("Markdown Preview", function () {
   describe("markdown-preview:toggle", function () {
     beforeEach(() => waitsForPromise(() => atom.workspace.open("code-block.md")));
 
-    it("does not exist for text editors that are not set to a grammar defined in `markdown-preview.grammars`", function () {
+    // The command is registered once, on the workspace, so that Packages >
+    // Markdown Preview works when focus is anywhere. The grammar list decides
+    // what the command does, not whether it can be dispatched.
+    it("exists whatever the active editor's grammar is", function () {
       atom.config.set("markdown-preview.grammars", ["source.weird-md"]);
-      const editorElement = atom.workspace.getActiveTextEditor().getElement();
       const commands = atom.commands
-        .findCommands({ target: editorElement })
+        .findCommands({ target: atom.workspace.getElement() })
         .map((command) => command.name);
-      expect(commands).not.toContain("markdown-preview:toggle");
+      expect(commands).toContain("markdown-preview:toggle");
     });
 
-    it("exists for text editors that are set to a grammar defined in `markdown-preview.grammars`", function () {
+    it("previews an editor whose grammar is in `markdown-preview.grammars`", function () {
       atom.config.set("markdown-preview.grammars", ["source.gfm"]);
-      const editorElement = atom.workspace.getActiveTextEditor().getElement();
-      const commands = atom.commands
-        .findCommands({ target: editorElement })
-        .map((command) => command.name);
-      expect(commands).toContain("markdown-preview:toggle");
+      atom.commands.dispatch(atom.workspace.getElement(), "markdown-preview:toggle");
+
+      waitsFor(() => atom.workspace.getCenter().getPanes()[1]?.getActiveItem());
+      runs(() =>
+        expect(
+          atom.workspace.getCenter().getPanes()[1].getActiveItem() instanceof MarkdownPreviewView,
+        ).toBe(true),
+      );
     });
 
-    it("updates whenever the list of grammars changes", function () {
-      // Last two tests combined
-      atom.config.set("markdown-preview.grammars", ["source.gfm", "text.plain"]);
-      const editorElement = atom.workspace.getActiveTextEditor().getElement();
-      let commands = atom.commands
-        .findCommands({ target: editorElement })
-        .map((command) => command.name);
-      expect(commands).toContain("markdown-preview:toggle");
+    it("says why it declined when the grammar is not in the list", function () {
+      atom.config.set("markdown-preview.grammars", ["source.weird-md"]);
+      const warnings = [];
+      atom.notifications.onDidAddNotification((notification) => warnings.push(notification));
 
-      atom.config.set("markdown-preview.grammars", ["source.weird-md", "text.plain"]);
-      commands = atom.commands
-        .findCommands({ target: editorElement })
-        .map((command) => command.name);
-      expect(commands).not.toContain("markdown-preview:toggle");
+      atom.commands.dispatch(atom.workspace.getElement(), "markdown-preview:toggle");
+
+      expect(warnings.length).toBe(1);
+      expect(warnings[0].getType()).toBe("warning");
     });
   });
 

@@ -17,7 +17,9 @@ To install `markdown-preview` search for _markdown-preview_ in the Install pane 
 
 ## Commands
 
-Commands available in `atom-text-editor[data-grammar=...]`:
+Commands available in `atom-workspace`. The first three act on the active editor
+and decline with a notification when its grammar is not in the
+`markdown-preview.grammars` list:
 
 - `markdown-preview:toggle`: open or close the preview for the current editor,
 - `markdown-preview:copy-html`: copy the rendered HTML to the clipboard,
