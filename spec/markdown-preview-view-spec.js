@@ -7,7 +7,7 @@
 const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
-const { TextEditor } = require("atom");
+const { TextEditor } = require("lumine");
 const MarkdownPreviewView = require("../lib/markdown-preview-view");
 const renderer = require("../lib/renderer");
 const TextMateLanguageMode = new TextEditor().getBuffer().getLanguageMode().constructor;
@@ -21,16 +21,16 @@ describe("MarkdownPreviewView", function () {
     jasmine.useRealClock();
 
     jasmine.unspy(TextMateLanguageMode.prototype, "tokenizeInBackground");
-    spyOn(atom.packages, "hasActivatedInitialPackages").andReturn(true);
+    spyOn(lumine.packages, "hasActivatedInitialPackages").andReturn(true);
 
-    const filePath = atom.project.getDirectories()[0].resolve("subdir/file.markdown");
+    const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");
 
     preview = new MarkdownPreviewView({ filePath });
     jasmine.attachToDOM(preview.element);
 
-    await atom.packages.activatePackage("language-ruby");
-    await atom.packages.activatePackage("language-javascript");
-    await atom.packages.activatePackage("markdown-preview");
+    await lumine.packages.activatePackage("language-ruby");
+    await lumine.packages.activatePackage("language-javascript");
+    await lumine.packages.activatePackage("markdown-preview");
   });
 
   afterEach(() => preview.destroy());
@@ -63,7 +63,7 @@ describe("MarkdownPreviewView", function () {
 
   describe("in-page anchor links", function () {
     it("uses GitHub-compatible heading ids with the original parser", async function () {
-      atom.config.set("markdown-preview.useOriginalParser", true);
+      lumine.config.set("markdown-preview.useOriginalParser", true);
       const html = await renderer.toHTML(
         [
           "[Launch](#-launch)",
@@ -104,7 +104,7 @@ describe("MarkdownPreviewView", function () {
     });
 
     it("resets original parser heading ids between renders", async function () {
-      atom.config.set("markdown-preview.useOriginalParser", true);
+      lumine.config.set("markdown-preview.useOriginalParser", true);
       const markdown = ["## Repeated", "", "## Repeated"].join("\n");
 
       const firstRender = await renderer.toHTML(markdown);
@@ -179,7 +179,7 @@ describe("MarkdownPreviewView", function () {
     });
 
     it("recreates the preview when serialized/deserialized", function () {
-      newPreview = atom.deserializers.deserialize(preview.serialize());
+      newPreview = lumine.deserializers.deserialize(preview.serialize());
       jasmine.attachToDOM(newPreview.element);
       expect(newPreview.getPath()).toBe(preview.getPath());
     });
@@ -197,36 +197,36 @@ describe("MarkdownPreviewView", function () {
       await preview.renderMarkdown().catch(() => {});
       fs.removeSync(filePath);
 
-      newPreview = atom.deserializers.deserialize(serialized);
+      newPreview = lumine.deserializers.deserialize(serialized);
       expect(newPreview).toBeUndefined();
     });
 
     it("serializes the editor id when opened for an editor", async () => {
       preview.destroy();
 
-      await atom.workspace.open("new.markdown");
+      await lumine.workspace.open("new.markdown");
 
       preview = new MarkdownPreviewView({
-        editorId: atom.workspace.getActiveTextEditor().id,
+        editorId: lumine.workspace.getActiveTextEditor().id,
       });
 
       jasmine.attachToDOM(preview.element);
-      expect(preview.getPath()).toBe(atom.workspace.getActiveTextEditor().getPath());
+      expect(preview.getPath()).toBe(lumine.workspace.getActiveTextEditor().getPath());
 
-      newPreview = atom.deserializers.deserialize(preview.serialize());
+      newPreview = lumine.deserializers.deserialize(preview.serialize());
       jasmine.attachToDOM(newPreview.element);
       expect(newPreview.getPath()).toBe(preview.getPath());
     });
   });
 
-  describe("code block conversion to atom-text-editor tags", function () {
+  describe("code block conversion to lumine-text-editor tags", function () {
     beforeEach(async () => {
       await preview.renderMarkdown();
     });
 
     it("removes line decorations on rendered code blocks", function () {
       const editor = preview.element.querySelector(
-        "atom-text-editor[data-grammar='text plain null-grammar']",
+        "lumine-text-editor[data-grammar='text plain null-grammar']",
       );
       const decorations = editor.getModel().getDecorations({ class: "cursor-line", type: "line" });
       expect(decorations.length).toBe(0);
@@ -234,14 +234,14 @@ describe("MarkdownPreviewView", function () {
 
     it("sets the editors as read-only", function () {
       preview.element
-        .querySelectorAll("atom-text-editor")
+        .querySelectorAll("lumine-text-editor")
         .forEach((editorElement) => expect(editorElement.getAttribute("tabindex")).toBeNull());
     });
 
     describe("when the code block's fence name has a matching grammar", function () {
-      it("assigns the grammar on the atom-text-editor", function () {
+      it("assigns the grammar on the lumine-text-editor", function () {
         const rubyEditor = preview.element.querySelector(
-          "atom-text-editor[data-grammar='source ruby']",
+          "lumine-text-editor[data-grammar='source ruby']",
         );
         expect(rubyEditor.getModel().getText()).toBe(`\
 def func
@@ -251,7 +251,7 @@ end\
 
         // nested in a list item
         const jsEditor = preview.element.querySelector(
-          "atom-text-editor[data-grammar='source js']",
+          "lumine-text-editor[data-grammar='source js']",
         );
         expect(jsEditor.getModel().getText()).toBe(`\
 if a === 3 {
@@ -264,7 +264,7 @@ b = 5
     describe("when the code block's fence name doesn't have a matching grammar", function () {
       it("does not assign a specific grammar", function () {
         const plainEditor = preview.element.querySelector(
-          "atom-text-editor[data-grammar='text plain null-grammar']",
+          "lumine-text-editor[data-grammar='text plain null-grammar']",
         );
         expect(plainEditor.getModel().getText()).toBe(`\
 function f(x) {
@@ -283,11 +283,11 @@ function f(x) {
         // models are what the renderer reassigns.
         const grammarScopes = () =>
           Array.from(
-            preview.element.querySelectorAll("atom-text-editor"),
+            preview.element.querySelectorAll("lumine-text-editor"),
             (element) => element.getModel().getGrammar().scopeName,
           );
 
-        await atom.packages.deactivatePackage("language-ruby");
+        await lumine.packages.deactivatePackage("language-ruby");
 
         await conditionPromise(
           () => !grammarScopes().includes("source.ruby"),
@@ -295,7 +295,7 @@ function f(x) {
           30000,
         );
 
-        await atom.packages.activatePackage("language-ruby");
+        await lumine.packages.activatePackage("language-ruby");
 
         await conditionPromise(
           () => grammarScopes().includes("source.ruby"),
@@ -303,7 +303,7 @@ function f(x) {
           30000,
         );
 
-        const rubyEditor = Array.from(preview.element.querySelectorAll("atom-text-editor")).find(
+        const rubyEditor = Array.from(preview.element.querySelectorAll("lumine-text-editor")).find(
           (element) => element.getModel().getGrammar().scopeName === "source.ruby",
         );
         expect(rubyEditor.getModel().getText()).toBe(`\
@@ -324,7 +324,7 @@ end\
       it("resolves to a path relative to the file", function () {
         const image = preview.element.querySelector("img[alt=Image1]");
         expect(image.getAttribute("src")).toBe(
-          atom.project.getDirectories()[0].resolve("subdir/image1.png"),
+          lumine.project.getDirectories()[0].resolve("subdir/image1.png"),
         );
       });
     });
@@ -333,7 +333,7 @@ end\
       it("resolves to a path relative to the project root", function () {
         const image = preview.element.querySelector("img[alt=Image2]");
         expect(image.getAttribute("src")).toBe(
-          atom.project.getDirectories()[0].resolve("tmp/image2.png"),
+          lumine.project.getDirectories()[0].resolve("tmp/image2.png"),
         );
       });
     });
@@ -342,9 +342,9 @@ end\
       it("doesn't change the URL when allowUnsafeProtocols is true", async () => {
         preview.destroy();
 
-        atom.config.set("markdown-preview.allowUnsafeProtocols", true);
+        lumine.config.set("markdown-preview.allowUnsafeProtocols", true);
 
-        const filePath = path.join(temp.mkdirSync("atom"), "foo.md");
+        const filePath = path.join(temp.mkdirSync("lumine"), "foo.md");
         // Use forward slashes in the Markdown URL so the absolute path is a
         // valid link on Windows too (backslashes get percent-encoded).
         fs.writeFileSync(filePath, `![absolute](${filePath.replace(/\\/g, "/")})`);
@@ -362,9 +362,9 @@ end\
     it("removes the URL when allowUnsafeProtocols is false", async () => {
       preview.destroy();
 
-      atom.config.set("markdown-preview.allowUnsafeProtocols", false);
+      lumine.config.set("markdown-preview.allowUnsafeProtocols", false);
 
-      const filePath = path.join(temp.mkdirSync("atom"), "foo.md");
+      const filePath = path.join(temp.mkdirSync("lumine"), "foo.md");
       fs.writeFileSync(filePath, `![absolute](${filePath})`);
       preview = new MarkdownPreviewView({ filePath });
       jasmine.attachToDOM(preview.element);
@@ -385,7 +385,7 @@ end\
   describe("gfm newlines", function () {
     describe("when gfm newlines are not enabled", function () {
       it("creates a single paragraph with <br>", async () => {
-        atom.config.set("markdown-preview.breakOnSingleNewline", false);
+        lumine.config.set("markdown-preview.breakOnSingleNewline", false);
 
         await preview.renderMarkdown();
 
@@ -395,7 +395,7 @@ end\
 
     describe("when gfm newlines are enabled", function () {
       it("creates a single paragraph with no <br>", async () => {
-        atom.config.set("markdown-preview.breakOnSingleNewline", true);
+        lumine.config.set("markdown-preview.breakOnSingleNewline", true);
 
         await preview.renderMarkdown();
 
@@ -406,7 +406,7 @@ end\
 
   describe("yaml front matter", function () {
     it("creates a table with the YAML variables", async () => {
-      atom.config.set("markdown-preview.breakOnSingleNewline", true);
+      lumine.config.set("markdown-preview.breakOnSingleNewline", true);
 
       await preview.renderMarkdown();
 
@@ -423,10 +423,10 @@ end\
     it("adds the `has-selection` class to the preview depending on if there is a text selection", async () => {
       jasmine.useRealClock();
       expect(preview.element.classList.contains("has-selection")).toBe(false);
-      await conditionPromise(() => document.querySelector("atom-text-editor"));
+      await conditionPromise(() => document.querySelector("lumine-text-editor"));
       const selection = window.getSelection();
       selection.removeAllRanges();
-      selection.selectAllChildren(document.querySelector("atom-text-editor"));
+      selection.selectAllChildren(document.querySelector("lumine-text-editor"));
 
       await conditionPromise(() => preview.element.classList.contains("has-selection") === true);
 
@@ -440,11 +440,11 @@ end\
     beforeEach(async () => {
       jasmine.useRealClock();
       preview.destroy();
-      const filePath = atom.project.getDirectories()[0].resolve("subdir/code-block.md");
+      const filePath = lumine.project.getDirectories()[0].resolve("subdir/code-block.md");
       preview = new MarkdownPreviewView({ filePath });
       // Add to workspace for core:save-as command to be propagated up to the workspace
-      await atom.workspace.open(preview);
-      jasmine.attachToDOM(atom.views.getView(atom.workspace));
+      await lumine.workspace.open(preview);
+      jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
     });
 
     it("saves the rendered HTML and opens it", async () => {
@@ -466,10 +466,10 @@ end\
         },
       ];
 
-      const atomTextEditorStyles = [
-        "atom-text-editor .line { color: brown; }\natom-text-editor .number { color: cyan; }",
-        "atom-text-editor :host .something { color: black; }",
-        "atom-text-editor .hr { background: url(lumine://markdown-preview/assets/hr.png); }",
+      const lumineTextEditorStyles = [
+        "lumine-text-editor .line { color: brown; }\nlumine-text-editor .number { color: cyan; }",
+        "lumine-text-editor :host .something { color: black; }",
+        "lumine-text-editor .hr { background: url(lumine://markdown-preview/assets/hr.png); }",
       ];
 
       await preview.renderMarkdown();
@@ -478,16 +478,16 @@ end\
       spyOn(preview, "getSaveDialogOptions").andReturn({
         defaultPath: outputPath,
       });
-      spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+      spyOn(lumine.applicationDelegate, "showSaveDialog").andCallFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       spyOn(preview, "getDocumentStyleSheets").andReturn(markdownPreviewStyles);
-      spyOn(preview, "getTextEditorStyles").andReturn(atomTextEditorStyles);
+      spyOn(preview, "getTextEditorStyles").andReturn(lumineTextEditorStyles);
 
-      await atom.commands.dispatch(preview.element, "core:save-as");
+      await lumine.commands.dispatch(preview.element, "core:save-as");
 
       await conditionPromise(() => {
-        const activeEditor = atom.workspace.getActiveTextEditor();
+        const activeEditor = lumine.workspace.getActiveTextEditor();
         return activeEditor && activeEditor.getPath() === outputPath;
       });
 
@@ -515,18 +515,18 @@ end\
       const unrelatedStyle = ".something else { color: red; }";
 
       beforeEach(function () {
-        atom.styles.addStyleSheet(textEditorStyle, {
-          context: "atom-text-editor",
+        lumine.styles.addStyleSheet(textEditorStyle, {
+          context: "lumine-text-editor",
         });
 
-        atom.styles.addStyleSheet(unrelatedStyle, {
+        lumine.styles.addStyleSheet(unrelatedStyle, {
           context: "unrelated-context",
         });
 
         return (extractedStyles = preview.getTextEditorStyles());
       });
 
-      it("returns an array containing atom-text-editor css style strings", function () {
+      it("returns an array containing lumine-text-editor css style strings", function () {
         expect(extractedStyles.indexOf(textEditorStyle)).toBeGreaterThan(-1);
       });
 
@@ -541,7 +541,7 @@ end\
       preview.destroy();
       preview.element.remove();
 
-      const filePath = atom.project.getDirectories()[0].resolve("subdir/code-block.md");
+      const filePath = lumine.project.getDirectories()[0].resolve("subdir/code-block.md");
       preview = new MarkdownPreviewView({ filePath });
       jasmine.attachToDOM(preview.element);
 
@@ -550,12 +550,12 @@ end\
 
     describe("when there is no text selected", function () {
       it("copies the rendered HTML of the entire Markdown document to the clipboard", async () => {
-        expect(atom.clipboard.read()).toBe("initial clipboard content");
+        expect(lumine.clipboard.read()).toBe("initial clipboard content");
 
-        await atom.commands.dispatch(preview.element, "core:copy");
+        await lumine.commands.dispatch(preview.element, "core:copy");
 
         const element = document.createElement("div");
-        element.innerHTML = atom.clipboard.read();
+        element.innerHTML = lumine.clipboard.read();
         expect(element.querySelector("h1").innerText).toBe("Code Block");
         expect(
           element.querySelector(
@@ -579,13 +579,13 @@ end\
         const selection = window.getSelection();
         selection.removeAllRanges();
         const range = document.createRange();
-        range.setStart(document.querySelector("atom-text-editor"), 0);
+        range.setStart(document.querySelector("lumine-text-editor"), 0);
         range.setEnd(document.querySelector("p").firstChild, 3);
         selection.addRange(range);
 
-        atom.commands.dispatch(preview.element, "core:copy");
+        lumine.commands.dispatch(preview.element, "core:copy");
         // Windows' clipboard normalizes line endings to CRLF on the round-trip.
-        const clipboardText = atom.clipboard.read().replace(/\r\n/g, "\n");
+        const clipboardText = lumine.clipboard.read().replace(/\r\n/g, "\n");
 
         expect(clipboardText).toBe(`\
 if a === 3 {
@@ -599,14 +599,14 @@ enc\
 
   describe("when markdown-preview:select-all is triggered", () => {
     it("selects the entire Markdown preview", async () => {
-      const filePath = atom.project.getDirectories()[0].resolve("subdir/code-block.md");
+      const filePath = lumine.project.getDirectories()[0].resolve("subdir/code-block.md");
       const preview2 = new MarkdownPreviewView({ filePath });
       jasmine.attachToDOM(preview2.element);
 
       await preview.renderMarkdown();
 
       {
-        atom.commands.dispatch(preview.element, "markdown-preview:select-all");
+        lumine.commands.dispatch(preview.element, "markdown-preview:select-all");
         const { commonAncestorContainer } = window.getSelection().getRangeAt(0);
         expect(commonAncestorContainer).toEqual(preview.element);
       }
@@ -614,7 +614,7 @@ enc\
       await preview2.renderMarkdown();
 
       {
-        atom.commands.dispatch(preview2.element, "markdown-preview:select-all");
+        lumine.commands.dispatch(preview2.element, "markdown-preview:select-all");
         const selection = window.getSelection();
         expect(selection.rangeCount).toBe(1);
         const { commonAncestorContainer } = selection.getRangeAt(0);
@@ -630,17 +630,17 @@ enc\
       await preview.renderMarkdown();
 
       const originalZoomLevel = getComputedStyle(preview.element).zoom;
-      atom.commands.dispatch(preview.element, "markdown-preview:zoom-in");
+      lumine.commands.dispatch(preview.element, "markdown-preview:zoom-in");
       expect(getComputedStyle(preview.element).zoom).toBeGreaterThan(originalZoomLevel);
-      atom.commands.dispatch(preview.element, "markdown-preview:zoom-out");
+      lumine.commands.dispatch(preview.element, "markdown-preview:zoom-out");
       expect(getComputedStyle(preview.element).zoom).toBe(originalZoomLevel);
     });
   });
 
   describe("when GitHub styles are enabled", () => {
     beforeEach(() => {
-      atom.config.set("markdown-preview.useGitHubStyle", true);
-      atom.config.set("markdown-preview.gitHubStyleMode", "light");
+      lumine.config.set("markdown-preview.useGitHubStyle", true);
+      lumine.config.set("markdown-preview.gitHubStyleMode", "light");
     });
 
     it("uses the GitHub styles", async () => {
@@ -660,11 +660,11 @@ enc\
       let paragraph = preview.element.querySelector("p");
       expect(getComputedStyle(paragraph).color).toBe(expectedColors.light);
 
-      atom.config.set("markdown-preview.gitHubStyleMode", "dark");
+      lumine.config.set("markdown-preview.gitHubStyleMode", "dark");
       expect(preview.element.dataset.useGithubStyle).toBe("dark");
       expect(getComputedStyle(paragraph).color).toBe(expectedColors.dark);
 
-      atom.config.set("markdown-preview.gitHubStyleMode", "auto");
+      lumine.config.set("markdown-preview.gitHubStyleMode", "auto");
       expect(preview.element.dataset.useGithubStyle).toBe("auto");
       // We don't know which mode will be preferred on the system we're running
       // on, but as a sanity check we can at least verify that the style value

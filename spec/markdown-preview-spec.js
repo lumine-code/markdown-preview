@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
 const MarkdownPreviewView = require("../lib/markdown-preview-view");
-const { TextEditor } = require("atom");
+const { TextEditor } = require("lumine");
 const TextMateLanguageMode = new TextEditor().getBuffer().getLanguageMode().constructor;
 
 describe("Markdown Preview", function () {
@@ -10,28 +10,28 @@ describe("Markdown Preview", function () {
 
   beforeEach(function () {
     const fixturesPath = path.join(__dirname, "fixtures");
-    const tempPath = temp.mkdirSync("atom");
+    const tempPath = temp.mkdirSync("lumine");
     fs.copySync(fixturesPath, tempPath);
-    atom.project.setPaths([tempPath]);
+    lumine.project.setPaths([tempPath]);
 
     jasmine.unspy(TextMateLanguageMode.prototype, "tokenizeInBackground");
 
     jasmine.useRealClock();
-    jasmine.attachToDOM(atom.views.getView(atom.workspace));
+    jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
 
-    waitsForPromise(() => atom.packages.activatePackage("markdown-preview"));
+    waitsForPromise(() => lumine.packages.activatePackage("markdown-preview"));
 
-    waitsForPromise(() => atom.packages.activatePackage("language-gfm"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-gfm"));
 
-    runs(() => spyOn(atom.packages, "hasActivatedInitialPackages").andReturn(true));
+    runs(() => spyOn(lumine.packages, "hasActivatedInitialPackages").andReturn(true));
   });
 
   const expectPreviewInSplitPane = function () {
-    waitsFor(() => atom.workspace.getCenter().getPanes().length === 2);
+    waitsFor(() => lumine.workspace.getCenter().getPanes().length === 2);
 
     waitsFor(
       "markdown preview to be created",
-      () => (preview = atom.workspace.getCenter().getPanes()[1].getActiveItem()),
+      () => (preview = lumine.workspace.getCenter().getPanes()[1].getActiveItem()),
     );
 
     waitsFor("preview to finish loading", () => {
@@ -40,23 +40,23 @@ describe("Markdown Preview", function () {
 
     runs(() => {
       expect(preview).toBeInstanceOf(MarkdownPreviewView);
-      expect(preview.getPath()).toBe(atom.workspace.getActivePaneItem().getPath());
+      expect(preview.getPath()).toBe(lumine.workspace.getActivePaneItem().getPath());
     });
   };
 
   describe("when a preview has not been created for the file", function () {
     it("displays a markdown preview in a split pane", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/file.markdown"));
+      waitsForPromise(() => lumine.workspace.open("subdir/file.markdown"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
       expectPreviewInSplitPane();
 
       runs(() => {
-        const [editorPane] = atom.workspace.getCenter().getPanes();
+        const [editorPane] = lumine.workspace.getCenter().getPanes();
         expect(editorPane.getItems()).toHaveLength(1);
         expect(editorPane.isActive()).toBe(true);
       });
@@ -64,10 +64,10 @@ describe("Markdown Preview", function () {
 
     describe("when the editor's path does not exist", function () {
       it("splits the current pane to the right with a markdown preview for the file", function () {
-        waitsForPromise(() => atom.workspace.open("new.markdown"));
+        waitsForPromise(() => lumine.workspace.open("new.markdown"));
         runs(() =>
-          atom.commands.dispatch(
-            atom.workspace.getActiveTextEditor().getElement(),
+          lumine.commands.dispatch(
+            lumine.workspace.getActiveTextEditor().getElement(),
             "markdown-preview:toggle",
           ),
         );
@@ -77,10 +77,10 @@ describe("Markdown Preview", function () {
 
     describe("when the editor does not have a path", function () {
       it("splits the current pane to the right with a markdown preview for the file", function () {
-        waitsForPromise(() => atom.workspace.open(""));
+        waitsForPromise(() => lumine.workspace.open(""));
         runs(() =>
-          atom.commands.dispatch(
-            atom.workspace.getActiveTextEditor().getElement(),
+          lumine.commands.dispatch(
+            lumine.workspace.getActiveTextEditor().getElement(),
             "markdown-preview:toggle",
           ),
         );
@@ -90,10 +90,10 @@ describe("Markdown Preview", function () {
 
     describe("when the path contains a space", function () {
       it("renders the preview", function () {
-        waitsForPromise(() => atom.workspace.open("subdir/file with space.md"));
+        waitsForPromise(() => lumine.workspace.open("subdir/file with space.md"));
         runs(() =>
-          atom.commands.dispatch(
-            atom.workspace.getActiveTextEditor().getElement(),
+          lumine.commands.dispatch(
+            lumine.workspace.getActiveTextEditor().getElement(),
             "markdown-preview:toggle",
           ),
         );
@@ -103,10 +103,10 @@ describe("Markdown Preview", function () {
 
     describe("when the path contains accented characters", function () {
       it("renders the preview", function () {
-        waitsForPromise(() => atom.workspace.open("subdir/áccéntéd.md"));
+        waitsForPromise(() => lumine.workspace.open("subdir/áccéntéd.md"));
         runs(() =>
-          atom.commands.dispatch(
-            atom.workspace.getActiveTextEditor().getElement(),
+          lumine.commands.dispatch(
+            lumine.workspace.getActiveTextEditor().getElement(),
             "markdown-preview:toggle",
           ),
         );
@@ -117,10 +117,10 @@ describe("Markdown Preview", function () {
 
   describe("when a preview has been created for the file", function () {
     beforeEach(function () {
-      waitsForPromise(() => atom.workspace.open("subdir/file.markdown"));
+      waitsForPromise(() => lumine.workspace.open("subdir/file.markdown"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -128,21 +128,21 @@ describe("Markdown Preview", function () {
     });
 
     it("closes the existing preview when toggle is triggered a second time on the editor", function () {
-      atom.commands.dispatch(
-        atom.workspace.getActiveTextEditor().getElement(),
+      lumine.commands.dispatch(
+        lumine.workspace.getActiveTextEditor().getElement(),
         "markdown-preview:toggle",
       );
 
-      const [editorPane, previewPane] = atom.workspace.getCenter().getPanes();
+      const [editorPane, previewPane] = lumine.workspace.getCenter().getPanes();
       expect(editorPane.isActive()).toBe(true);
       expect(previewPane.getActiveItem()).toBeUndefined();
     });
 
     it("closes the existing preview when toggle is triggered on it and it has focus", function () {
-      const [editorPane, previewPane] = atom.workspace.getCenter().getPanes();
+      const [editorPane, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      atom.commands.dispatch(editorPane.getActiveItem().getElement(), "markdown-preview:toggle");
+      lumine.commands.dispatch(editorPane.getActiveItem().getElement(), "markdown-preview:toggle");
       expect(previewPane.getActiveItem()).toBeUndefined();
     });
 
@@ -150,7 +150,7 @@ describe("Markdown Preview", function () {
       it("re-renders the preview", function () {
         spyOn(preview, "showLoading");
 
-        const markdownEditor = atom.workspace.getActiveTextEditor();
+        const markdownEditor = lumine.workspace.getActiveTextEditor();
         markdownEditor.setText("Hey!");
 
         waitsFor(() => preview.element.textContent.includes("Hey!"));
@@ -160,7 +160,7 @@ describe("Markdown Preview", function () {
 
       it("invokes ::onDidChangeMarkdown listeners", function () {
         let listener;
-        const markdownEditor = atom.workspace.getActiveTextEditor();
+        const markdownEditor = lumine.workspace.getActiveTextEditor();
         preview.onDidChangeMarkdown((listener = jasmine.createSpy("didChangeMarkdownListener")));
 
         runs(() => markdownEditor.setText("Hey!"));
@@ -170,11 +170,11 @@ describe("Markdown Preview", function () {
 
       describe("when the preview is in the active pane but is not the active item", function () {
         it("re-renders the preview but does not make it active", function () {
-          const markdownEditor = atom.workspace.getActiveTextEditor();
-          const previewPane = atom.workspace.getCenter().getPanes()[1];
+          const markdownEditor = lumine.workspace.getActiveTextEditor();
+          const previewPane = lumine.workspace.getCenter().getPanes()[1];
           previewPane.activate();
 
-          waitsForPromise(() => atom.workspace.open());
+          waitsForPromise(() => lumine.workspace.open());
 
           runs(() => markdownEditor.setText("Hey!"));
 
@@ -189,12 +189,12 @@ describe("Markdown Preview", function () {
 
       describe("when the preview is not the active item and not in the active pane", function () {
         it("re-renders the preview and makes it active", function () {
-          const markdownEditor = atom.workspace.getActiveTextEditor();
-          const [editorPane, previewPane] = atom.workspace.getCenter().getPanes();
+          const markdownEditor = lumine.workspace.getActiveTextEditor();
+          const [editorPane, previewPane] = lumine.workspace.getCenter().getPanes();
           previewPane.splitRight({ copyActiveItem: true });
           previewPane.activate();
 
-          waitsForPromise(() => atom.workspace.open());
+          waitsForPromise(() => lumine.workspace.open());
 
           runs(() => {
             editorPane.activate();
@@ -212,20 +212,20 @@ describe("Markdown Preview", function () {
 
       describe("when the liveUpdate config is set to false", function () {
         it("only re-renders the markdown when the editor is saved, not when the contents are modified", function () {
-          atom.config.set("markdown-preview.liveUpdate", false);
+          lumine.config.set("markdown-preview.liveUpdate", false);
 
           const didStopChangingHandler = jasmine.createSpy("didStopChangingHandler");
-          atom.workspace
+          lumine.workspace
             .getActiveTextEditor()
             .getBuffer()
             .onDidStopChanging(didStopChangingHandler);
-          atom.workspace.getActiveTextEditor().setText("ch ch changes");
+          lumine.workspace.getActiveTextEditor().setText("ch ch changes");
 
           waitsFor(() => didStopChangingHandler.callCount > 0);
 
           runs(() => {
             expect(preview.element.textContent).not.toMatch("ch ch changes");
-            atom.workspace.getActiveTextEditor().save();
+            lumine.workspace.getActiveTextEditor().save();
           });
 
           waitsFor(() => preview.element.textContent.includes("ch ch changes"));
@@ -235,28 +235,28 @@ describe("Markdown Preview", function () {
 
     describe("when the original preview is split", function () {
       it("renders another preview in the new split pane", function () {
-        atom.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
+        lumine.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
 
-        expect(atom.workspace.getCenter().getPanes()).toHaveLength(3);
+        expect(lumine.workspace.getCenter().getPanes()).toHaveLength(3);
 
         waitsFor(
           "split markdown preview to be created",
-          () => (preview = atom.workspace.getCenter().getPanes()[2].getActiveItem()),
+          () => (preview = lumine.workspace.getCenter().getPanes()[2].getActiveItem()),
         );
 
         runs(() => {
           expect(preview).toBeInstanceOf(MarkdownPreviewView);
-          expect(preview.getPath()).toBe(atom.workspace.getActivePaneItem().getPath());
+          expect(preview.getPath()).toBe(lumine.workspace.getActivePaneItem().getPath());
         });
       });
     });
 
     describe("when the editor is destroyed", function () {
-      beforeEach(() => atom.workspace.getCenter().getPanes()[0].destroyActiveItem());
+      beforeEach(() => lumine.workspace.getCenter().getPanes()[0].destroyActiveItem());
 
       it("falls back to using the file path", function () {
-        atom.workspace.getCenter().getPanes()[1].activate();
-        expect(preview.file.getPath()).toBe(atom.workspace.getActivePaneItem().getPath());
+        lumine.workspace.getCenter().getPanes()[1].activate();
+        expect(preview.file.getPath()).toBe(lumine.workspace.getActivePaneItem().getPath());
       });
 
       it("continues to update the preview if the file is changed on #win32 and #darwin", function () {
@@ -297,18 +297,18 @@ describe("Markdown Preview", function () {
       });
 
       it("allows a new split pane of the preview to be created", function () {
-        atom.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
+        lumine.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
 
-        expect(atom.workspace.getCenter().getPanes()).toHaveLength(3);
+        expect(lumine.workspace.getCenter().getPanes()).toHaveLength(3);
 
         waitsFor(
           "split markdown preview to be created",
-          () => (preview = atom.workspace.getCenter().getPanes()[2].getActiveItem()),
+          () => (preview = lumine.workspace.getCenter().getPanes()[2].getActiveItem()),
         );
 
         runs(() => {
           expect(preview).toBeInstanceOf(MarkdownPreviewView);
-          expect(preview.getPath()).toBe(atom.workspace.getActivePaneItem().getPath());
+          expect(preview.getPath()).toBe(lumine.workspace.getActivePaneItem().getPath());
         });
       });
     });
@@ -316,14 +316,14 @@ describe("Markdown Preview", function () {
 
   describe("when the markdown preview view is requested by file URI", function () {
     it("opens a preview editor and watches the file for changes", function () {
-      waitsForPromise("atom.workspace.open promise to be resolved", () =>
-        atom.workspace.open(
-          `markdown-preview://${atom.project.getDirectories()[0].resolve("subdir/file.markdown")}`,
+      waitsForPromise("lumine.workspace.open promise to be resolved", () =>
+        lumine.workspace.open(
+          `markdown-preview://${lumine.project.getDirectories()[0].resolve("subdir/file.markdown")}`,
         ),
       );
 
       runs(() => {
-        preview = atom.workspace.getActivePaneItem();
+        preview = lumine.workspace.getActivePaneItem();
         expect(preview).toBeInstanceOf(MarkdownPreviewView);
 
         spyOn(preview, "renderMarkdownText");
@@ -339,17 +339,17 @@ describe("Markdown Preview", function () {
 
   describe("when the editor's grammar it not enabled for preview", function () {
     it("does not open the markdown preview", function () {
-      atom.config.set("markdown-preview.grammars", []);
+      lumine.config.set("markdown-preview.grammars", []);
 
-      waitsForPromise(() => atom.workspace.open("subdir/file.markdown"));
+      waitsForPromise(() => lumine.workspace.open("subdir/file.markdown"));
 
       runs(() => {
-        spyOn(atom.workspace, "open").andCallThrough();
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        spyOn(lumine.workspace, "open").andCallThrough();
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         );
-        expect(atom.workspace.open).not.toHaveBeenCalled();
+        expect(lumine.workspace.open).not.toHaveBeenCalled();
       });
     });
   });
@@ -358,10 +358,10 @@ describe("Markdown Preview", function () {
     it("updates the preview's title", function () {
       const titleChangedCallback = jasmine.createSpy("titleChangedCallback");
 
-      waitsForPromise(() => atom.workspace.open("subdir/file.markdown"));
+      waitsForPromise(() => lumine.workspace.open("subdir/file.markdown"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -371,15 +371,15 @@ describe("Markdown Preview", function () {
       // The preview follows the editor, whose buffer follows the renamed file
       // on disk. Wait for the buffer's file watch to arm before renaming.
       waitsForPromise("buffer watch to arm", () =>
-        atom.workspace.getActiveTextEditor().getBuffer().getFileWatchStartPromise(),
+        lumine.workspace.getActiveTextEditor().getBuffer().getFileWatchStartPromise(),
       );
 
       runs(() => {
         expect(preview.getTitle()).toBe("file.markdown Preview");
         preview.onDidChangeTitle(titleChangedCallback);
         fs.renameSync(
-          atom.workspace.getActiveTextEditor().getPath(),
-          path.join(path.dirname(atom.workspace.getActiveTextEditor().getPath()), "file2.md"),
+          lumine.workspace.getActiveTextEditor().getPath(),
+          path.join(path.dirname(lumine.workspace.getActiveTextEditor().getPath()), "file2.md"),
         );
       });
 
@@ -391,44 +391,44 @@ describe("Markdown Preview", function () {
 
   describe("when the URI opened does not have a markdown-preview protocol", function () {
     it("does not throw an error trying to decode the URI (regression)", function () {
-      waitsForPromise(() => atom.workspace.open("%"));
+      waitsForPromise(() => lumine.workspace.open("%"));
 
-      runs(() => expect(atom.workspace.getActiveTextEditor()).toBeTruthy());
+      runs(() => expect(lumine.workspace.getActiveTextEditor()).toBeTruthy());
     });
   });
 
   describe("markdown-preview:toggle", function () {
-    beforeEach(() => waitsForPromise(() => atom.workspace.open("code-block.md")));
+    beforeEach(() => waitsForPromise(() => lumine.workspace.open("code-block.md")));
 
     // The command is registered once, on the workspace, so that Packages >
     // Markdown Preview works when focus is anywhere. The grammar list decides
     // what the command does, not whether it can be dispatched.
     it("exists whatever the active editor's grammar is", function () {
-      atom.config.set("markdown-preview.grammars", ["source.weird-md"]);
-      const commands = atom.commands
-        .findCommands({ target: atom.workspace.getElement() })
+      lumine.config.set("markdown-preview.grammars", ["source.weird-md"]);
+      const commands = lumine.commands
+        .findCommands({ target: lumine.workspace.getElement() })
         .map((command) => command.name);
       expect(commands).toContain("markdown-preview:toggle");
     });
 
     it("previews an editor whose grammar is in `markdown-preview.grammars`", function () {
-      atom.config.set("markdown-preview.grammars", ["source.gfm"]);
-      atom.commands.dispatch(atom.workspace.getElement(), "markdown-preview:toggle");
+      lumine.config.set("markdown-preview.grammars", ["source.gfm"]);
+      lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
 
-      waitsFor(() => atom.workspace.getCenter().getPanes()[1]?.getActiveItem());
+      waitsFor(() => lumine.workspace.getCenter().getPanes()[1]?.getActiveItem());
       runs(() =>
         expect(
-          atom.workspace.getCenter().getPanes()[1].getActiveItem() instanceof MarkdownPreviewView,
+          lumine.workspace.getCenter().getPanes()[1].getActiveItem() instanceof MarkdownPreviewView,
         ).toBe(true),
       );
     });
 
     it("says why it declined when the grammar is not in the list", function () {
-      atom.config.set("markdown-preview.grammars", ["source.weird-md"]);
+      lumine.config.set("markdown-preview.grammars", ["source.weird-md"]);
       const warnings = [];
-      atom.notifications.onDidAddNotification((notification) => warnings.push(notification));
+      lumine.notifications.onDidAddNotification((notification) => warnings.push(notification));
 
-      atom.commands.dispatch(atom.workspace.getElement(), "markdown-preview:toggle");
+      lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
 
       expect(warnings.length).toBe(1);
       expect(warnings[0].getType()).toBe("warning");
@@ -438,7 +438,7 @@ describe("Markdown Preview", function () {
   describe("markdown-preview:preview-file", function () {
     // The real row builder, so this covers the actual DOM contract rather than
     // a stand-in that could drift from it.
-    const treeViewPath = atom.packages.resolvePackagePath("tree-view");
+    const treeViewPath = lumine.packages.resolvePackagePath("tree-view");
     const TreeEntry = require(path.join(treeViewPath, "lib", "tree-entry"));
     const TreeRowView = require(path.join(treeViewPath, "lib", "tree-row-view"));
     const rowViews = [];
@@ -448,7 +448,7 @@ describe("Markdown Preview", function () {
       rowViews.length = 0;
     });
 
-    function treeViewRow(name, filePath = path.join(atom.project.getPaths()[0], name)) {
+    function treeViewRow(name, filePath = path.join(lumine.project.getPaths()[0], name)) {
       const container = document.createElement("div");
       container.classList.add("tree-view");
 
@@ -470,7 +470,7 @@ describe("Markdown Preview", function () {
     }
 
     function contextMenuLabels(element) {
-      return atom.contextMenu.templateForElement(element).map((item) => item.label);
+      return lumine.contextMenu.templateForElement(element).map((item) => item.label);
     }
 
     it("offers the command anywhere on the row, not just on the file name", function () {
@@ -492,53 +492,53 @@ describe("Markdown Preview", function () {
     });
 
     it("previews the row's file when dispatched from the name span inside it", function () {
-      const filePath = path.join(atom.project.getPaths()[0], "subdir", "simple.md");
+      const filePath = path.join(lumine.project.getPaths()[0], "subdir", "simple.md");
       const { nameSpan } = treeViewRow("simple.md", filePath);
 
       // Dispatching from the span is what a real right-click on the text does;
       // the handler has to read the row that matched, not the click target.
-      atom.commands.dispatch(nameSpan, "markdown-preview:preview-file");
+      lumine.commands.dispatch(nameSpan, "markdown-preview:preview-file");
 
-      waitsFor(() => atom.workspace.getActivePaneItem() instanceof MarkdownPreviewView);
+      waitsFor(() => lumine.workspace.getActivePaneItem() instanceof MarkdownPreviewView);
 
-      runs(() => expect(atom.workspace.getActivePaneItem().getPath()).toBe(filePath));
+      runs(() => expect(lumine.workspace.getActivePaneItem().getPath()).toBe(filePath));
     });
   });
 
   describe("when markdown-preview:copy-html is triggered", function () {
     it("copies the HTML to the clipboard", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/simple.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/simple.md"));
 
       waitsForPromise(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:copy-html",
         ),
       );
 
       runs(() => {
         // Windows' clipboard normalizes line endings to CRLF on the round-trip.
-        expect(atom.clipboard.read().replace(/\r\n/g, "\n")).toBe(`\
+        expect(lumine.clipboard.read().replace(/\r\n/g, "\n")).toBe(`\
 <p><em>italic</em></p>
 <p><strong>bold</strong></p>
 <p>encoding \u2192 issue</p>\
 `);
 
-        atom.workspace.getActiveTextEditor().setSelectedBufferRange([
+        lumine.workspace.getActiveTextEditor().setSelectedBufferRange([
           [0, 0],
           [1, 0],
         ]);
       });
 
       waitsForPromise(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:copy-html",
         ),
       );
 
       runs(() =>
-        expect(atom.clipboard.read()).toBe(`\
+        expect(lumine.clipboard.read()).toBe(`\
 <p><em>italic</em></p>\
 `),
       );
@@ -546,22 +546,22 @@ describe("Markdown Preview", function () {
 
     describe("code block tokenization", function () {
       beforeEach(function () {
-        waitsForPromise(() => atom.packages.activatePackage("language-ruby"));
+        waitsForPromise(() => lumine.packages.activatePackage("language-ruby"));
 
-        waitsForPromise(() => atom.packages.activatePackage("markdown-preview"));
+        waitsForPromise(() => lumine.packages.activatePackage("markdown-preview"));
 
-        waitsForPromise(() => atom.workspace.open("subdir/file.markdown"));
+        waitsForPromise(() => lumine.workspace.open("subdir/file.markdown"));
 
         waitsForPromise(() =>
-          atom.commands.dispatch(
-            atom.workspace.getActiveTextEditor().getElement(),
+          lumine.commands.dispatch(
+            lumine.workspace.getActiveTextEditor().getElement(),
             "markdown-preview:copy-html",
           ),
         );
 
         runs(() => {
           preview = document.createElement("div");
-          preview.innerHTML = atom.clipboard.read();
+          preview.innerHTML = lumine.clipboard.read();
         });
       });
 
@@ -598,10 +598,10 @@ describe("Markdown Preview", function () {
 
   describe("sanitization", function () {
     it("removes script tags and attributes that commonly contain inline scripts", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/evil.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/evil.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -619,10 +619,10 @@ world\
     });
 
     it("remove any <!doctype> tag on markdown files", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/doctype-tag.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/doctype-tag.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -639,10 +639,10 @@ world\
 
   describe("when the markdown contains an <html> tag", function () {
     it("does not throw an exception", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/html-tag.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/html-tag.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -654,33 +654,33 @@ world\
 
   describe("when the markdown contains a <pre> tag", function () {
     it("does not throw an exception", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/pre-tag.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/pre-tag.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
       expectPreviewInSplitPane();
 
-      runs(() => expect(preview.element.querySelector("atom-text-editor")).toBeDefined());
+      runs(() => expect(preview.element.querySelector("lumine-text-editor")).toBeDefined());
     });
   });
 
   describe("when there is an image with a relative path and no directory", function () {
     it("does not alter the image src", function () {
-      for (let projectPath of atom.project.getPaths()) {
-        atom.project.removePath(projectPath);
+      for (let projectPath of lumine.project.getPaths()) {
+        lumine.project.removePath(projectPath);
       }
 
-      const filePath = path.join(temp.mkdirSync("atom"), "bar.md");
+      const filePath = path.join(temp.mkdirSync("lumine"), "bar.md");
       fs.writeFileSync(filePath, "![rel path](/foo.png)");
 
-      waitsForPromise(() => atom.workspace.open(filePath));
+      waitsForPromise(() => lumine.workspace.open(filePath));
 
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -695,13 +695,13 @@ world\
   });
 
   describe("GitHub style markdown preview", function () {
-    beforeEach(() => atom.config.set("markdown-preview.useGitHubStyle", false));
+    beforeEach(() => lumine.config.set("markdown-preview.useGitHubStyle", false));
 
     it("renders markdown using the default style when GitHub styling is disabled", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/simple.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/simple.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -711,12 +711,12 @@ world\
     });
 
     it("renders markdown using the GitHub styling when enabled", function () {
-      atom.config.set("markdown-preview.useGitHubStyle", true);
+      lumine.config.set("markdown-preview.useGitHubStyle", true);
 
-      waitsForPromise(() => atom.workspace.open("subdir/simple.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/simple.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -726,10 +726,10 @@ world\
     });
 
     it("updates the rendering style immediately when the configuration is changed", function () {
-      waitsForPromise(() => atom.workspace.open("subdir/simple.md"));
+      waitsForPromise(() => lumine.workspace.open("subdir/simple.md"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -738,10 +738,10 @@ world\
       runs(() => {
         expect(preview.element.getAttribute("data-use-github-style")).toBeNull();
 
-        atom.config.set("markdown-preview.useGitHubStyle", true);
+        lumine.config.set("markdown-preview.useGitHubStyle", true);
         expect(preview.element.getAttribute("data-use-github-style")).not.toBeNull();
 
-        atom.config.set("markdown-preview.useGitHubStyle", false);
+        lumine.config.set("markdown-preview.useGitHubStyle", false);
         expect(preview.element.getAttribute("data-use-github-style")).toBeNull();
       });
     });
@@ -749,10 +749,10 @@ world\
 
   describe("when markdown-preview:save-as-html is triggered", function () {
     beforeEach(function () {
-      waitsForPromise(() => atom.workspace.open("subdir/simple.markdown"));
+      waitsForPromise(() => lumine.workspace.open("subdir/simple.markdown"));
       runs(() =>
-        atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:toggle",
         ),
       );
@@ -760,7 +760,7 @@ world\
     });
 
     it("saves the HTML when it is triggered and the editor has focus", function () {
-      const [editorPane] = atom.workspace.getCenter().getPanes();
+      const [editorPane] = lumine.workspace.getCenter().getPanes();
       editorPane.activate();
 
       const outputPath = temp.path({ suffix: ".html" });
@@ -770,11 +770,11 @@ world\
         spyOn(preview, "getSaveDialogOptions").andReturn({
           defaultPath: outputPath,
         });
-        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+        spyOn(lumine.applicationDelegate, "showSaveDialog").andCallFake((options) =>
           Promise.resolve({ canceled: false, filePath: options.defaultPath }),
         );
-        return atom.commands.dispatch(
-          atom.workspace.getActiveTextEditor().getElement(),
+        return lumine.commands.dispatch(
+          lumine.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:save-as-html",
         );
       });
@@ -785,7 +785,7 @@ world\
     });
 
     it("saves the HTML when it is triggered and the preview pane has focus", function () {
-      const [editorPane, previewPane] = atom.workspace.getCenter().getPanes();
+      const [editorPane, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
       const outputPath = temp.path({ suffix: ".html" });
@@ -795,10 +795,10 @@ world\
         spyOn(preview, "getSaveDialogOptions").andReturn({
           defaultPath: outputPath,
         });
-        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+        spyOn(lumine.applicationDelegate, "showSaveDialog").andCallFake((options) =>
           Promise.resolve({ canceled: false, filePath: options.defaultPath }),
         );
-        return atom.commands.dispatch(
+        return lumine.commands.dispatch(
           editorPane.getActiveItem().getElement(),
           "markdown-preview:save-as-html",
         );

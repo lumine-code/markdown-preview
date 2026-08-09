@@ -4538,7 +4538,7 @@
     border: inherit;
   }
 
-  atom-text-editor {
+  lumine-text-editor {
     padding: 0.8em 1em;
     margin-bottom: 1em;
     font-size: 0.85em;
@@ -4564,7 +4564,7 @@
       border: inherit;
     }
 
-    atom-text-editor {
+    lumine-text-editor {
       padding: 0.8em 1em;
       margin-bottom: 1em;
       font-size: 0.85em;
@@ -4591,7 +4591,7 @@
     border: inherit;
   }
 
-  atom-text-editor {
+  lumine-text-editor {
     padding: 0.8em 1em;
     margin-bottom: 1em;
     font-size: 0.85em;
@@ -4617,7 +4617,7 @@
       border: inherit;
     }
 
-    atom-text-editor {
+    lumine-text-editor {
       padding: 0.8em 1em;
       margin-bottom: 1em;
       font-size: 0.85em;

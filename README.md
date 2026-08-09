@@ -17,7 +17,7 @@ To install `markdown-preview` search for _markdown-preview_ in the Install pane 
 
 ## Commands
 
-Commands available in `atom-workspace`. The first three act on the active editor
+Commands available in `lumine-workspace`. The first three act on the active editor
 and decline with a notification when its grammar is not in the
 `markdown-preview.grammars` list:
 
