@@ -770,14 +770,9 @@ world\
         spyOn(preview, "getSaveDialogOptions").andReturn({
           defaultPath: outputPath,
         });
-        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake(function (options, callback) {
-          if (typeof callback === "function") {
-            callback(options.defaultPath);
-          }
-          // TODO: When https://github.com/atom/atom/pull/16245 lands remove the return
-          // and the existence check on the callback
-          return options.defaultPath;
-        });
+        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+          Promise.resolve({ canceled: false, filePath: options.defaultPath }),
+        );
         return atom.commands.dispatch(
           atom.workspace.getActiveTextEditor().getElement(),
           "markdown-preview:save-as-html",
@@ -800,14 +795,9 @@ world\
         spyOn(preview, "getSaveDialogOptions").andReturn({
           defaultPath: outputPath,
         });
-        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake(function (options, callback) {
-          if (typeof callback === "function") {
-            callback(options.defaultPath);
-          }
-          // TODO: When https://github.com/atom/atom/pull/16245 lands remove the return
-          // and the existence check on the callback
-          return options.defaultPath;
-        });
+        spyOn(atom.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+          Promise.resolve({ canceled: false, filePath: options.defaultPath }),
+        );
         return atom.commands.dispatch(
           editorPane.getActiveItem().getElement(),
           "markdown-preview:save-as-html",
