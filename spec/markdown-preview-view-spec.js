@@ -11,7 +11,6 @@ const { TextEditor } = require("lumine");
 const MarkdownPreviewView = require("../lib/markdown-preview-view");
 const renderer = require("../lib/renderer");
 const TextMateLanguageMode = new TextEditor().getBuffer().getLanguageMode().constructor;
-const { conditionPromise } = require("./async-spec-helpers");
 
 describe("MarkdownPreviewView", function () {
   let preview = null;
@@ -21,7 +20,7 @@ describe("MarkdownPreviewView", function () {
     jasmine.useRealClock();
 
     jasmine.unspy(TextMateLanguageMode.prototype, "tokenizeInBackground");
-    spyOn(lumine.packages, "hasActivatedInitialPackages").andReturn(true);
+    spyOn(lumine.packages, "hasActivatedInitialPackages").and.returnValue(true);
 
     const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");
 
@@ -475,14 +474,14 @@ end\
       await preview.renderMarkdown();
 
       expect(fs.isFileSync(outputPath)).toBe(false);
-      spyOn(preview, "getSaveDialogOptions").andReturn({
+      spyOn(preview, "getSaveDialogOptions").and.returnValue({
         defaultPath: outputPath,
       });
-      spyOn(lumine.applicationDelegate, "showSaveDialog").andCallFake((options) =>
+      spyOn(lumine.applicationDelegate, "showSaveDialog").and.callFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
-      spyOn(preview, "getDocumentStyleSheets").andReturn(markdownPreviewStyles);
-      spyOn(preview, "getTextEditorStyles").andReturn(lumineTextEditorStyles);
+      spyOn(preview, "getDocumentStyleSheets").and.returnValue(markdownPreviewStyles);
+      spyOn(preview, "getTextEditorStyles").and.returnValue(lumineTextEditorStyles);
 
       await lumine.commands.dispatch(preview.element, "core:save-as");
 
