@@ -507,6 +507,68 @@ end\
       ).toBe("3");
     });
 
+    // Three ways the exported document used to stop looking like the preview it
+    // was made from. All of them are invisible in the editor and only show up
+    // once the document is opened somewhere else.
+    describe("the standalone document", function () {
+      beforeEach(async () => {
+        await preview.renderMarkdown();
+      });
+
+      // The GitHub-style rules name the attribute in their own selectors, so
+      // only the body tag can answer whether the document carries one.
+      const bodyTagOf = (exported) => {
+        const start = exported.indexOf("<body");
+        return exported.slice(start, exported.indexOf(">", start) + 1);
+      };
+
+      // The base stylesheet hangs off `.markdown-preview:not([data-use-github-style])`,
+      // so writing the attribute out unconditionally matched that `:not()`
+      // against a present attribute and silently dropped every base rule.
+      it("omits the GitHub-style attribute exactly when the preview does", async () => {
+        preview.element.removeAttribute("data-use-github-style");
+
+        expect(bodyTagOf(await preview.buildStandaloneDocument())).not.toContain(
+          "data-use-github-style",
+        );
+      });
+
+      it("carries the GitHub-style attribute when the preview has one", async () => {
+        preview.element.setAttribute("data-use-github-style", "dark");
+
+        expect(bodyTagOf(await preview.buildStandaloneDocument())).toContain(
+          'data-use-github-style="dark"',
+        );
+      });
+
+      // The preview's rules read the theme's custom properties, which are
+      // declared on `:root` by stylesheets this export never collects.
+      it("resolves the custom properties its rules reference", () => {
+        preview.element.style.setProperty("--markdown-preview-border", "#abcdef");
+        const css = ".markdown-preview td { border: 1px solid var(--markdown-preview-border); }";
+
+        const resolved = preview.resolveThemeVariables(css);
+
+        expect(resolved.startsWith(":root {")).toBe(true);
+        expect(resolved).toContain("--markdown-preview-border: #abcdef;");
+      });
+
+      it("declares nothing when the rules reference no custom properties", () => {
+        expect(preview.resolveThemeVariables(".markdown-preview { color: red; }")).toBe("");
+      });
+
+      // A code block used to be appended twice when the render raced the
+      // component's update promise.
+      it("writes each code-block line once", async () => {
+        const exported = await preview.buildStandaloneDocument();
+        const element = document.createElement("div");
+        element.innerHTML = exported.slice(exported.indexOf("<body"));
+
+        // code-block.md fences exactly three lines.
+        expect(element.querySelectorAll("pre.editor-colors .line").length).toBe(3);
+      });
+    });
+
     describe("text editor style extraction", function () {
       let [extractedStyles] = [];
 
