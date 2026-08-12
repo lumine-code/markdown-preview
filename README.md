@@ -8,6 +8,7 @@ Open a live, rendered preview of the Markdown in the current editor.
 - **Split pane**: opens the preview beside the source or in a new tab.
 - **Tree view preview**: opens a preview straight from a Markdown file in the tree view.
 - **HTML export**: copies the rendered HTML to the clipboard or saves it to a file.
+- **PDF export**: prints the rendered preview to a PDF, without the surrounding editor.
 - **GitHub styling**: optionally renders the preview with GitHub.com styles in light, dark, or system mode.
 - **Zoom controls**: zooms the preview in and out or resets it to the default level.
 
@@ -17,13 +18,14 @@ To install `markdown-preview` search for _markdown-preview_ in the Install pane 
 
 ## Commands
 
-Commands available in `lumine-workspace`. The first three act on the active editor
+Commands available in `lumine-workspace`. The first four act on the active editor
 and decline with a notification when its grammar is not in the
 `markdown-preview.grammars` list:
 
 - `markdown-preview:toggle`: open or close the preview for the current editor,
 - `markdown-preview:copy-html`: copy the rendered HTML to the clipboard,
 - `markdown-preview:save-as-html`: save the rendered HTML to a file,
+- `markdown-preview:export-to-pdf`: export the rendered preview to a PDF file,
 - `markdown-preview:toggle-break-on-single-newline`: toggle line breaks on single newlines,
 - `markdown-preview:toggle-github-style`: toggle the GitHub.com preview style.
 

@@ -735,4 +735,88 @@ world\
       expect(fs.existsSync(outputPath)).toBe(true);
     });
   });
+
+  describe("when markdown-preview:export-to-pdf is triggered", function () {
+    beforeEach(async () => {
+      await lumine.workspace.open("subdir/simple.markdown");
+      lumine.commands.dispatch(
+        lumine.workspace.getActiveTextEditor().getElement(),
+        "markdown-preview:toggle",
+      );
+      await expectPreviewInSplitPane();
+    });
+
+    it("prints the standalone document the HTML export would have written", async () => {
+      const [editorPane] = lumine.workspace.getCenter().getPanes();
+      editorPane.activate();
+
+      const outputPath = temp.path({ suffix: ".pdf" });
+      spyOn(preview, "getPDFSaveDialogOptions").and.returnValue({ defaultPath: outputPath });
+      spyOn(lumine.window, "showSaveDialog").and.callFake((options) =>
+        Promise.resolve({ canceled: false, filePath: options.defaultPath }),
+      );
+      const printToPDF = spyOn(lumine.application, "printToPDF").and.returnValue(
+        Promise.resolve({ outcome: "success", result: outputPath }),
+      );
+
+      lumine.commands.dispatch(
+        lumine.workspace.getActiveTextEditor().getElement(),
+        "markdown-preview:export-to-pdf",
+      );
+
+      await conditionPromise(() => printToPDF.calls.count() > 0);
+
+      const [html, filePath] = printToPDF.calls.argsFor(0);
+      expect(filePath).toBe(outputPath);
+      expect(html).toContain("<!DOCTYPE html>");
+      expect(html).toContain("class='markdown-preview'");
+      // The preview's own stylesheet rides along, which is the whole point of
+      // printing this document rather than the window it is displayed in.
+      expect(html).toContain("<style>");
+    });
+
+    it("writes nothing when the save dialog is dismissed", async () => {
+      const [, previewPane] = lumine.workspace.getCenter().getPanes();
+      previewPane.activate();
+
+      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+        Promise.resolve({ canceled: true, filePath: undefined }),
+      );
+      spyOn(lumine.application, "printToPDF");
+
+      await lumine.packages.getActivePackage("markdown-preview").mainModule.exportToPDF();
+
+      expect(lumine.application.printToPDF).not.toHaveBeenCalled();
+    });
+
+    it("reports a failure from the main process instead of failing silently", async () => {
+      const [, previewPane] = lumine.workspace.getCenter().getPanes();
+      previewPane.activate();
+
+      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+        Promise.resolve({ canceled: false, filePath: temp.path({ suffix: ".pdf" }) }),
+      );
+      spyOn(lumine.application, "printToPDF").and.returnValue(
+        Promise.resolve({ outcome: "failure", error: { message: "no printer here" } }),
+      );
+      spyOn(lumine.notifications, "addError");
+
+      await lumine.packages.getActivePackage("markdown-preview").mainModule.exportToPDF();
+
+      expect(lumine.notifications.addError).toHaveBeenCalled();
+      expect(lumine.notifications.addError.calls.argsFor(0)[1].detail).toBe("no printer here");
+    });
+
+    it("declines with a warning when no preview is open", async () => {
+      lumine.workspace.getCenter().getPanes()[1].destroyItems();
+      await lumine.workspace.open("subdir/file.txt");
+      spyOn(lumine.notifications, "addWarning");
+      spyOn(lumine.application, "printToPDF");
+
+      await lumine.packages.getActivePackage("markdown-preview").mainModule.exportToPDF();
+
+      expect(lumine.notifications.addWarning).toHaveBeenCalled();
+      expect(lumine.application.printToPDF).not.toHaveBeenCalled();
+    });
+  });
 });

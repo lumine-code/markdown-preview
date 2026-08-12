@@ -11,6 +11,10 @@
               "command": "markdown-preview:toggle"
             },
             {
+              "label": "Export to PDF…",
+              "command": "markdown-preview:export-to-pdf"
+            },
+            {
               "label": "Toggle Break on Single Newline",
               "command": "markdown-preview:toggle-break-on-single-newline"
             },
@@ -35,6 +39,10 @@
       {
         "label": "Save As HTML…",
         "command": "core:save-as"
+      },
+      {
+        "label": "Export to PDF…",
+        "command": "markdown-preview:export-to-pdf"
       },
       {
         "type": "separator"
