@@ -14,13 +14,11 @@ Open a live, rendered preview of the Markdown in the current editor.
 
 ## Installation
 
-To install `markdown-preview` search for _markdown-preview_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/markdown-preview`.
+To install `markdown-preview` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/markdown-preview`.
 
 ## Commands
 
-Commands available in `lumine-workspace`. The first four act on the active editor
-and decline with a notification when its grammar is not in the
-`markdown-preview.grammars` list:
+Commands available in `lumine-workspace`. The first four act on the active editor and decline with a notification when its grammar is not in the `markdown-preview.grammars` list:
 
 - `markdown-preview:toggle`: open or close the preview for the current editor,
 - `markdown-preview:copy-html`: copy the rendered HTML to the clipboard,
