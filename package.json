@@ -144,7 +144,7 @@
   },
   "dependencies": {
     "@lumine-code/fs-plus": "github:lumine-code/fs-plus#ba2792e2fd5637748cdc9317886e6d3cac2ce801",
-    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#118828502bde8388c8f5415fc95d8cd18df477e9",
+    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#b8a1a6371d36ad95114372be8070c4e2357b3fee",
     "dedent": "^1.7.2",
     "dompurify": "^3.4.13",
     "emoji-images": "^0.1.1",
