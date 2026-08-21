@@ -31,6 +31,9 @@
   "backgroundTips": [
     "You can open a live preview of the Markdown file you are editing with {{ 'markdown-preview:toggle' | keystroke }}"
   ],
+  "specPackages": [
+    "language-ruby"
+  ],
   "scripts": {
     "test": "lumine --test spec",
     "lint": "eslint . --max-warnings 0",
