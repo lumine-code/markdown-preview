@@ -149,13 +149,13 @@
     "@lumine-code/fs-plus": "github:lumine-code/fs-plus#ba2792e2fd5637748cdc9317886e6d3cac2ce801",
     "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#cbf9388917fd1d59a533f43cf68a80d0c48036ac",
     "dedent": "^1.7.2",
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.14",
     "emoji-images": "^0.1.1",
     "github-markdown-css": "^5.9.0",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "innertext": "^1.0.3",
-    "marked": "18.0.9",
+    "marked": "18.0.10",
     "morphdom": "^2.7.8"
   },
   "devDependencies": {
