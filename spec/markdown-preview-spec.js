@@ -55,6 +55,24 @@ describe("Markdown Preview", function () {
       expect(editorPane.isActive()).toBe(true);
     });
 
+    it("does not restore a detached source pane after opening its preview", async () => {
+      const editor = await lumine.workspace.open("subdir/file.markdown");
+      const center = lumine.workspace.getCenter();
+      const detachedPane = center.detachPaneItem(editor);
+      spyOn(detachedPane, "activate").and.callThrough();
+
+      try {
+        await lumine.packages
+          .getActivePackage("markdown-preview")
+          .mainModule.addPreviewForEditor(editor);
+
+        expect(detachedPane.activate).not.toHaveBeenCalled();
+        expect(center.getActiveTiledPane().getActiveItem()).toBeInstanceOf(MarkdownPreviewView);
+      } finally {
+        if (detachedPane.isAlive()) center.attachDetachedPane(detachedPane);
+      }
+    });
+
     describe("when the editor's path does not exist", function () {
       it("splits the current pane to the right with a markdown preview for the file", async () => {
         await lumine.workspace.open("new.markdown");
