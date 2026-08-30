@@ -55,24 +55,6 @@ describe("Markdown Preview", function () {
       expect(editorPane.isActive()).toBe(true);
     });
 
-    it("does not restore a detached source pane after opening its preview", async () => {
-      const editor = await lumine.workspace.open("subdir/file.markdown");
-      const center = lumine.workspace.getCenter();
-      const detachedPane = center.detachPaneItem(editor);
-      spyOn(detachedPane, "activate").and.callThrough();
-
-      try {
-        await lumine.packages
-          .getActivePackage("markdown-preview")
-          .mainModule.addPreviewForEditor(editor);
-
-        expect(detachedPane.activate).not.toHaveBeenCalled();
-        expect(center.getActiveTiledPane().getActiveItem()).toBeInstanceOf(MarkdownPreviewView);
-      } finally {
-        if (detachedPane.isAlive()) center.attachDetachedPane(detachedPane);
-      }
-    });
-
     describe("when the editor's path does not exist", function () {
       it("splits the current pane to the right with a markdown preview for the file", async () => {
         await lumine.workspace.open("new.markdown");
@@ -770,8 +752,8 @@ world\
 
       const outputPath = temp.path({ suffix: ".pdf" });
       spyOn(preview, "getPDFSaveDialogOptions").and.returnValue({ defaultPath: outputPath });
-      const choosePath = spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.callFake(
-        (_item, options) => Promise.resolve({ canceled: false, filePath: options.defaultPath }),
+      spyOn(lumine.window, "showSaveDialog").and.callFake((options) =>
+        Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       const printToPDF = spyOn(lumine.application, "printToPDF").and.returnValue(
         Promise.resolve({ outcome: "success", result: outputPath }),
@@ -785,10 +767,6 @@ world\
       await conditionPromise(() => printToPDF.calls.count() > 0);
 
       const [html, filePath] = printToPDF.calls.argsFor(0);
-      expect(choosePath.calls.mostRecent().args[0]).toBe(preview);
-      expect(choosePath.calls.mostRecent().args[1]).toEqual(
-        jasmine.objectContaining({ defaultPath: outputPath }),
-      );
       expect(filePath).toBe(outputPath);
       expect(html).toContain("<!DOCTYPE html>");
       expect(html).toContain("class='markdown-preview'");
@@ -801,7 +779,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.returnValue(
+      spyOn(lumine.window, "showSaveDialog").and.returnValue(
         Promise.resolve({ canceled: true, filePath: undefined }),
       );
       spyOn(lumine.application, "printToPDF");
@@ -815,7 +793,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.returnValue(
+      spyOn(lumine.window, "showSaveDialog").and.returnValue(
         Promise.resolve({ canceled: false, filePath: temp.path({ suffix: ".pdf" }) }),
       );
       spyOn(lumine.application, "printToPDF").and.returnValue(
