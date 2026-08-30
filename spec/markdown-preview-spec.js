@@ -770,8 +770,8 @@ world\
 
       const outputPath = temp.path({ suffix: ".pdf" });
       spyOn(preview, "getPDFSaveDialogOptions").and.returnValue({ defaultPath: outputPath });
-      spyOn(lumine.window, "showSaveDialog").and.callFake((options) =>
-        Promise.resolve({ canceled: false, filePath: options.defaultPath }),
+      const choosePath = spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.callFake(
+        (_item, options) => Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       const printToPDF = spyOn(lumine.application, "printToPDF").and.returnValue(
         Promise.resolve({ outcome: "success", result: outputPath }),
@@ -785,6 +785,10 @@ world\
       await conditionPromise(() => printToPDF.calls.count() > 0);
 
       const [html, filePath] = printToPDF.calls.argsFor(0);
+      expect(choosePath.calls.mostRecent().args[0]).toBe(preview);
+      expect(choosePath.calls.mostRecent().args[1]).toEqual(
+        jasmine.objectContaining({ defaultPath: outputPath }),
+      );
       expect(filePath).toBe(outputPath);
       expect(html).toContain("<!DOCTYPE html>");
       expect(html).toContain("class='markdown-preview'");
@@ -797,7 +801,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+      spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.returnValue(
         Promise.resolve({ canceled: true, filePath: undefined }),
       );
       spyOn(lumine.application, "printToPDF");
@@ -811,7 +815,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+      spyOn(lumine.workspace, "showSaveDialogForPaneItem").and.returnValue(
         Promise.resolve({ canceled: false, filePath: temp.path({ suffix: ".pdf" }) }),
       );
       spyOn(lumine.application, "printToPDF").and.returnValue(
