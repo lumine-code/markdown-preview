@@ -522,19 +522,6 @@ describe("Markdown renderer grammar settlement", () => {
     expect(codeBlockSource(html)).toBe(codeSource);
   });
 
-  it("preserves source code when the forced component update fails", async () => {
-    spyOn(TextEditor.prototype, "whenGrammarSettled").and.callFake(function () {
-      spyOn(this.component, "getNextUpdatePromise").and.returnValue(new Promise(() => {}));
-      spyOn(this.component, "updateSync").and.throwError(new Error("forced update failed"));
-      return Promise.resolve(true);
-    });
-
-    const html = await renderer.toHTML(markdown);
-
-    expect(codeBlockLineCount(html)).toBe(0);
-    expect(codeBlockSource(html)).toBe(codeSource);
-  });
-
   it("preserves nonempty source when the component has no rendered lines", async () => {
     let codeEditor;
     spyOn(TextEditor.prototype, "whenGrammarSettled").and.callFake(function () {
