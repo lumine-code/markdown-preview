@@ -32,6 +32,8 @@
     "You can open a live preview of the Markdown file you are editing with {{ 'markdown-preview:toggle' | keystroke }}"
   ],
   "specPackages": [
+    "language-gfm",
+    "language-javascript",
     "language-ruby"
   ],
   "scripts": {

@@ -7,10 +7,8 @@
 const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
-const { TextEditor } = require("lumine");
 const MarkdownPreviewView = require("../lib/markdown-preview-view");
 const renderer = require("../lib/renderer");
-const TextMateLanguageMode = new TextEditor().getBuffer().getLanguageMode().constructor;
 
 describe("MarkdownPreviewView", function () {
   let preview = null;
@@ -19,7 +17,6 @@ describe("MarkdownPreviewView", function () {
     // Makes _.debounce work
     jasmine.useRealClock();
 
-    jasmine.unspy(TextMateLanguageMode.prototype, "tokenizeInBackground");
     spyOn(lumine.packages, "hasActivatedInitialPackages").and.returnValue(true);
 
     const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");

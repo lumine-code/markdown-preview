@@ -2,8 +2,6 @@ const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
 const MarkdownPreviewView = require("../lib/markdown-preview-view");
-const { TextEditor } = require("lumine");
-const TextMateLanguageMode = new TextEditor().getBuffer().getLanguageMode().constructor;
 
 describe("Markdown Preview", function () {
   let preview = null;
@@ -13,8 +11,6 @@ describe("Markdown Preview", function () {
     const tempPath = temp.mkdirSync("lumine");
     fs.copySync(fixturesPath, tempPath);
     lumine.project.setPaths([tempPath]);
-
-    jasmine.unspy(TextMateLanguageMode.prototype, "tokenizeInBackground");
 
     jasmine.useRealClock();
     jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
@@ -529,9 +525,9 @@ describe("Markdown Preview", function () {
 
       describe("when the code block's fence name doesn't have a matching grammar", function () {
         it("does not tokenize the code block", async () => {
-          expect(
-            preview.querySelectorAll("pre.lang-kombucha .line .syntax--null-grammar").length,
-          ).toBe(2);
+          const block = preview.querySelector("pre.lang-kombucha");
+          expect(block.textContent).toContain("drink-that-stuff:");
+          expect(block.querySelectorAll('[class*="syntax--"]').length).toBe(0);
         });
       });
 
