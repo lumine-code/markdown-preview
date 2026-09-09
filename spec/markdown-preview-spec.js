@@ -228,20 +228,27 @@ describe("Markdown Preview", function () {
 
       it("falls back to using the file path", async () => {
         lumine.workspace.getCenter().getPanes()[1].activate();
-        expect(preview.file.getPath()).toBe(lumine.workspace.getActivePaneItem().getPath());
+        expect(preview.file.path).toBe(lumine.workspace.getActivePaneItem().getPath());
       });
 
-      it("continues to update the preview if the file is changed on #win32 and #darwin", async () => {
+      it("retargets an editor move and continues to update the preview", async () => {
         let listener;
         const titleChangedCallback = jasmine.createSpy("titleChangedCallback");
 
         // The fallback file watcher arms asynchronously; wait for it before
         // mutating the file so the first change is observed.
-        await preview.file.getStartPromise();
+        await preview.file.ready;
 
         expect(preview.getTitle()).toBe("file.markdown Preview");
         preview.onDidChangeTitle(titleChangedCallback);
-        fs.renameSync(preview.getPath(), path.join(path.dirname(preview.getPath()), "file2.md"));
+        const rename = {
+          oldPath: preview.getPath(),
+          newPath: path.join(path.dirname(preview.getPath()), "file2.md"),
+          isDirectory: false,
+        };
+        const move = lumine.workspace.beginFileMove([rename]);
+        fs.renameSync(rename.oldPath, rename.newPath);
+        await move.complete([rename]);
 
         await conditionPromise(() => preview.getTitle() === "file2.md Preview", "title to update");
 
@@ -251,7 +258,7 @@ describe("Markdown Preview", function () {
 
         // The watch was re-pointed at the renamed file; wait for the new
         // watcher to arm before writing to it.
-        await preview.file.getStartPromise();
+        await preview.file.ready;
 
         fs.writeFileSync(preview.getPath(), "Hey!");
 
@@ -298,7 +305,8 @@ describe("Markdown Preview", function () {
       expect(preview).toBeInstanceOf(MarkdownPreviewView);
 
       spyOn(preview, "renderMarkdownText");
-      preview.file.emitter.emit("did-change");
+      await preview.file.ready;
+      fs.appendFileSync(preview.getPath(), "\nexternal change\n");
 
       await conditionPromise(
         () => preview.renderMarkdownText.calls.count() > 0,
@@ -322,7 +330,7 @@ describe("Markdown Preview", function () {
     });
   });
 
-  describe("when the editor's path changes on #win32 and #darwin", function () {
+  describe("when the editor moves the file", function () {
     it("updates the preview's title", async () => {
       const titleChangedCallback = jasmine.createSpy("titleChangedCallback");
 
@@ -334,16 +342,17 @@ describe("Markdown Preview", function () {
 
       await expectPreviewInSplitPane();
 
-      // The preview follows the editor, whose buffer follows the renamed file
-      // on disk. Wait for the buffer's file watch to arm before renaming.
+      // The preview follows its editor's explicit document move.
       await lumine.workspace.getActiveTextEditor().getBuffer().getFileWatchStartPromise();
 
       expect(preview.getTitle()).toBe("file.markdown Preview");
       preview.onDidChangeTitle(titleChangedCallback);
-      fs.renameSync(
-        lumine.workspace.getActiveTextEditor().getPath(),
-        path.join(path.dirname(lumine.workspace.getActiveTextEditor().getPath()), "file2.md"),
-      );
+      const oldPath = lumine.workspace.getActiveTextEditor().getPath();
+      const newPath = path.join(path.dirname(oldPath), "file2.md");
+      const rename = { oldPath, newPath, isDirectory: false };
+      const move = lumine.workspace.beginFileMove([rename]);
+      fs.renameSync(oldPath, newPath);
+      await move.complete([rename]);
 
       await conditionPromise(() => preview.getTitle() === "file2.md Preview");
 
@@ -502,7 +511,9 @@ describe("Markdown Preview", function () {
 
     describe("code block tokenization", function () {
       beforeEach(async () => {
-        await lumine.packages.activatePackage("language-ruby");
+        await lumine.packages.activatePackage(
+          path.dirname(require.resolve("language-ruby/package.json")),
+        );
 
         await lumine.packages.activatePackage("markdown-preview");
 

@@ -19,14 +19,15 @@ describe("MarkdownPreviewView", function () {
 
     spyOn(lumine.packages, "hasActivatedInitialPackages").and.returnValue(true);
 
-    const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");
-
-    preview = new MarkdownPreviewView({ filePath });
-    jasmine.attachToDOM(preview.element);
-
-    await lumine.packages.activatePackage("language-ruby");
+    await lumine.packages.activatePackage(
+      path.dirname(require.resolve("language-ruby/package.json")),
+    );
     await lumine.packages.activatePackage("language-javascript");
     await lumine.packages.activatePackage("markdown-preview");
+
+    const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");
+    preview = new MarkdownPreviewView({ filePath });
+    jasmine.attachToDOM(preview.element);
   });
 
   afterEach(() => preview.destroy());
@@ -291,7 +292,9 @@ function f(x) {
           30000,
         );
 
-        await lumine.packages.activatePackage("language-ruby");
+        await lumine.packages.activatePackage(
+          path.dirname(require.resolve("language-ruby/package.json")),
+        );
 
         await conditionPromise(
           () => grammarScopes().includes("source.ruby"),
@@ -678,6 +681,7 @@ enc\
         const { commonAncestorContainer } = selection.getRangeAt(0);
         expect(commonAncestorContainer).toEqual(preview2.element);
       }
+      preview2.destroy();
     });
   });
 

@@ -167,6 +167,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.3.0",
     "globals": "^17.11.0",
+    "language-ruby": "github:lumine-code/language-ruby#958ed439038fce3cecbb5618c3693074ae03da57",
     "prettier": "^3.9.6"
   }
 }
