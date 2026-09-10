@@ -148,8 +148,8 @@
     "MarkdownPreviewView": "createMarkdownPreviewView"
   },
   "dependencies": {
-    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#905b14a8ba174e7d1236db25c189efd3e1473d57",
-    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#fd9c48ac852a303e1fbc2e1ae77dbefa57ba6052",
+    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#e05833b203c67843d40a6bc650224ec0ac412407",
+    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#02d71a75193a1098c5f59d8ea7656a815ee3d712",
     "dedent": "^1.7.2",
     "dompurify": "^3.4.14",
     "emoji-images": "^0.1.1",
