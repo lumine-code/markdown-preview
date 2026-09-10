@@ -247,6 +247,7 @@ describe("Markdown Preview", function () {
           isDirectory: false,
         };
         const move = lumine.workspace.beginFileMove([rename]);
+        await move.ready;
         fs.renameSync(rename.oldPath, rename.newPath);
         await move.complete([rename]);
 
@@ -351,6 +352,7 @@ describe("Markdown Preview", function () {
       const newPath = path.join(path.dirname(oldPath), "file2.md");
       const rename = { oldPath, newPath, isDirectory: false };
       const move = lumine.workspace.beginFileMove([rename]);
+      await move.ready;
       fs.renameSync(oldPath, newPath);
       await move.complete([rename]);
 
