@@ -169,5 +169,25 @@
     "globals": "^17.11.0",
     "language-ruby": "github:lumine-code/language-ruby#0825ec19bf5af33088ddd4c579f7301a8a1a23eb",
     "prettier": "^3.9.6"
+  },
+  "workspaceOpeners": [
+    {
+      "uriPrefix": "markdown-preview://"
+    }
+  ],
+  "activationCommands": {
+    "lumine-workspace": [
+      "markdown-preview:copy-html",
+      "markdown-preview:export-to-pdf",
+      "markdown-preview:preview-file",
+      "markdown-preview:reset-zoom",
+      "markdown-preview:save-as-html",
+      "markdown-preview:select-all",
+      "markdown-preview:toggle",
+      "markdown-preview:toggle-break-on-single-newline",
+      "markdown-preview:toggle-github-style",
+      "markdown-preview:zoom-in",
+      "markdown-preview:zoom-out"
+    ]
   }
 }
