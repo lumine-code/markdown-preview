@@ -1,10 +1,10 @@
 const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
-const MarkdownPreviewView = require("../lib/markdown-preview-view");
 
 describe("Markdown Preview", function () {
   let preview = null;
+  let MarkdownPreviewView;
 
   beforeEach(async () => {
     const fixturesPath = path.join(__dirname, "fixtures");
@@ -16,6 +16,7 @@ describe("Markdown Preview", function () {
     jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
 
     await lumine.packages.activatePackage("markdown-preview");
+    MarkdownPreviewView = require("../lib/markdown-preview-view");
 
     await lumine.packages.activatePackage("language-gfm");
 
@@ -123,6 +124,30 @@ describe("Markdown Preview", function () {
 
       lumine.commands.dispatch(editorPane.getActiveItem().getElement(), "markdown-preview:toggle");
       expect(previewPane.getActiveItem()).toBeUndefined();
+    });
+
+    it("dispatches workspace configuration commands once from inside the preview", async () => {
+      const keyPath = "markdown-preview.breakOnSingleNewline";
+      const initialValue = lumine.config.get(keyPath);
+
+      await lumine.commands.dispatch(
+        preview.element,
+        "markdown-preview:toggle-break-on-single-newline",
+      );
+
+      expect(lumine.config.get(keyPath)).toBe(!initialValue);
+    });
+
+    it("destroys open previews and removes its adopted stylesheet on deactivation", async () => {
+      const mainModule = lumine.packages.getActivePackage("markdown-preview").mainModule;
+      const style = mainModule.style;
+      expect(document.adoptedStyleSheets).toContain(style);
+
+      await lumine.packages.deactivatePackage("markdown-preview");
+
+      expect(preview.destroyed).toBe(true);
+      expect(lumine.workspace.getPaneItems()).not.toContain(preview);
+      expect(document.adoptedStyleSheets).not.toContain(style);
     });
 
     describe("when the editor is modified", function () {

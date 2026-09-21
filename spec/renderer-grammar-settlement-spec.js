@@ -1,15 +1,17 @@
 const { TextEditor } = require("lumine");
-const MarkdownPreviewView = require("../lib/markdown-preview-view");
-const renderer = require("../lib/renderer");
 
 describe("Markdown renderer grammar settlement", () => {
   const codeLines = ["const first = 1;", "const second = 2;", "const third = 3;"];
   const codeSource = codeLines.join("\n");
   const markdown = ["```js", ...codeLines, "```"].join("\n");
+  let MarkdownPreviewView;
+  let renderer;
 
   beforeEach(async () => {
     jasmine.useRealClock();
     await lumine.packages.activatePackage("language-javascript");
+    MarkdownPreviewView = require("../lib/markdown-preview-view");
+    renderer = require("../lib/renderer");
   });
 
   function codeBlockLineCount(html) {

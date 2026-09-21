@@ -7,11 +7,11 @@
 const path = require("path");
 const fs = require("@lumine-code/fs-plus");
 const temp = require("@lumine-code/temp").track();
-const MarkdownPreviewView = require("../lib/markdown-preview-view");
-const renderer = require("../lib/renderer");
 
 describe("MarkdownPreviewView", function () {
   let preview = null;
+  let MarkdownPreviewView;
+  let renderer;
 
   beforeEach(async () => {
     // Makes _.debounce work
@@ -24,6 +24,8 @@ describe("MarkdownPreviewView", function () {
     );
     await lumine.packages.activatePackage("language-javascript");
     await lumine.packages.activatePackage("markdown-preview");
+    MarkdownPreviewView = require("../lib/markdown-preview-view");
+    renderer = require("../lib/renderer");
 
     const filePath = lumine.project.getDirectories()[0].resolve("subdir/file.markdown");
     preview = new MarkdownPreviewView({ filePath });
