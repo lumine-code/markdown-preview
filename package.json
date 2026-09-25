@@ -28,9 +28,6 @@
     "lumine": "^1.0.0",
     "node": ">=24"
   },
-  "backgroundTips": [
-    "You can open a live preview of the Markdown file you are editing with {{ 'markdown-preview:toggle' | keystroke }}"
-  ],
   "specPackages": [
     "language-gfm",
     "language-javascript",
@@ -146,6 +143,13 @@
   },
   "deserializers": {
     "MarkdownPreviewView": "createMarkdownPreviewView"
+  },
+  "providedServices": {
+    "background-tips.provider": {
+      "versions": {
+        "1.0.0": "provideBackgroundTips"
+      }
+    }
   },
   "dependencies": {
     "@lumine-code/fs-plus": "github:lumine-code/fs-plus#e05833b203c67843d40a6bc650224ec0ac412407",
