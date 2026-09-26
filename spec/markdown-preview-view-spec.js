@@ -23,6 +23,7 @@ describe("MarkdownPreviewView", function () {
       path.dirname(require.resolve("language-ruby/package.json")),
     );
     await lumine.packages.activatePackage("language-javascript");
+    await lumine.packages.activatePackage("language-text");
     await lumine.packages.activatePackage("markdown-preview");
     MarkdownPreviewView = require("../lib/markdown-preview-view");
     renderer = require("../lib/renderer");
@@ -224,9 +225,7 @@ describe("MarkdownPreviewView", function () {
     });
 
     it("removes line decorations on rendered code blocks", function () {
-      const editor = preview.element.querySelector(
-        "lumine-text-editor[data-grammar='text plain null-grammar']",
-      );
+      const editor = preview.element.querySelector("lumine-text-editor[data-grammar='text plain']");
       const decorations = editor.getModel().getDecorations({ class: "cursor-line", type: "line" });
       expect(decorations.length).toBe(0);
     });
@@ -263,7 +262,7 @@ b = 5
     describe("when the code block's fence name doesn't have a matching grammar", function () {
       it("does not assign a specific grammar", function () {
         const plainEditor = preview.element.querySelector(
-          "lumine-text-editor[data-grammar='text plain null-grammar']",
+          "lumine-text-editor[data-grammar='text plain']",
         );
         expect(plainEditor.getModel().getText()).toBe(`\
 function f(x) {

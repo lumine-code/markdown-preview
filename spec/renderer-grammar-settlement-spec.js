@@ -10,6 +10,7 @@ describe("Markdown renderer grammar settlement", () => {
   beforeEach(async () => {
     jasmine.useRealClock();
     await lumine.packages.activatePackage("language-javascript");
+    await lumine.packages.activatePackage("language-text");
     MarkdownPreviewView = require("../lib/markdown-preview-view");
     renderer = require("../lib/renderer");
   });
@@ -480,7 +481,7 @@ describe("Markdown renderer grammar settlement", () => {
     await conditionPromise(() => Boolean(finishGrammarWait));
     expect(codeEditor.getGrammar().scopeName).toBe("source.js");
 
-    expect(lumine.grammars.assignLanguageMode(codeEditor, "text.plain.null-grammar")).toBe(true);
+    expect(lumine.grammars.assignLanguageMode(codeEditor, null)).toBe(true);
     finishGrammarWait(false);
     const html = await renderPromise;
 
