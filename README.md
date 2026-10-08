@@ -2,6 +2,8 @@
 
 Open a live, rendered preview of the Markdown in the current editor.
 
+Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/markdown-preview`).
+
 ## Features
 
 - **Live preview**: renders the active Markdown file and updates as you type.
