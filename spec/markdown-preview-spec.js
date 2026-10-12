@@ -744,7 +744,7 @@ world\
       spyOn(preview, "getSaveDialogOptions").and.returnValue({
         defaultPath: outputPath,
       });
-      spyOn(lumine.applicationDelegate, "showSaveDialog").and.callFake((options) =>
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.callFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       lumine.commands.dispatch(
@@ -767,7 +767,7 @@ world\
       spyOn(preview, "getSaveDialogOptions").and.returnValue({
         defaultPath: outputPath,
       });
-      spyOn(lumine.applicationDelegate, "showSaveDialog").and.callFake((options) =>
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.callFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       lumine.commands.dispatch(
@@ -797,7 +797,7 @@ world\
 
       const outputPath = temp.path({ suffix: ".pdf" });
       spyOn(preview, "getPDFSaveDialogOptions").and.returnValue({ defaultPath: outputPath });
-      spyOn(lumine.window, "showSaveDialog").and.callFake((options) =>
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.callFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       const printToPDF = spyOn(lumine.application, "printToPDF").and.returnValue(
@@ -824,7 +824,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.returnValue(
         Promise.resolve({ canceled: true, filePath: undefined }),
       );
       spyOn(lumine.application, "printToPDF");
@@ -838,7 +838,7 @@ world\
       const [, previewPane] = lumine.workspace.getCenter().getPanes();
       previewPane.activate();
 
-      spyOn(lumine.window, "showSaveDialog").and.returnValue(
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.returnValue(
         Promise.resolve({ canceled: false, filePath: temp.path({ suffix: ".pdf" }) }),
       );
       spyOn(lumine.application, "printToPDF").and.returnValue(

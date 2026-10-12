@@ -542,7 +542,7 @@ end\
       spyOn(preview, "getSaveDialogOptions").and.returnValue({
         defaultPath: outputPath,
       });
-      spyOn(lumine.applicationDelegate, "showSaveDialog").and.callFake((options) =>
+      spyOn(lumine.workspace.getMainWindow(), "showSaveDialog").and.callFake((options) =>
         Promise.resolve({ canceled: false, filePath: options.defaultPath }),
       );
       spyOn(preview, "getDocumentStyleSheets").and.returnValue(markdownPreviewStyles);
