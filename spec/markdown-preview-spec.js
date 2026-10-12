@@ -196,7 +196,10 @@ describe("Markdown Preview", function () {
         it("re-renders the preview and makes it active", async () => {
           const markdownEditor = lumine.workspace.getActiveTextEditor();
           const [editorPane, previewPane] = lumine.workspace.getCenter().getPanes();
-          previewPane.splitRight({ copyActiveItem: true });
+          await lumine.workspace.copyPaneItem(previewPane.getActiveItem(), {
+            sourcePane: previewPane,
+            splitDirection: "right",
+          });
           previewPane.activate();
 
           await lumine.workspace.open();
@@ -234,7 +237,11 @@ describe("Markdown Preview", function () {
 
     describe("when the original preview is split", function () {
       it("renders another preview in the new split pane", async () => {
-        lumine.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
+        const previewPane = lumine.workspace.getCenter().getPanes()[1];
+        await lumine.workspace.copyPaneItem(previewPane.getActiveItem(), {
+          sourcePane: previewPane,
+          splitDirection: "right",
+        });
 
         expect(lumine.workspace.getCenter().getPanes()).toHaveLength(3);
 
@@ -306,7 +313,11 @@ describe("Markdown Preview", function () {
       });
 
       it("allows a new split pane of the preview to be created", async () => {
-        lumine.workspace.getCenter().getPanes()[1].splitRight({ copyActiveItem: true });
+        const previewPane = lumine.workspace.getCenter().getPanes()[1];
+        await lumine.workspace.copyPaneItem(previewPane.getActiveItem(), {
+          sourcePane: previewPane,
+          splitDirection: "right",
+        });
 
         expect(lumine.workspace.getCenter().getPanes()).toHaveLength(3);
 

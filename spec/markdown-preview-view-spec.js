@@ -35,6 +35,70 @@ describe("MarkdownPreviewView", function () {
 
   afterEach(() => preview.destroy());
 
+  it("copies the rendered viewport into an independent preview that survives its sibling", async () => {
+    await preview.renderMarkdown();
+    preview.element.style.maxHeight = "10px";
+    preview.element.scrollTop = 10;
+    const scrollTop = preview.element.scrollTop;
+    expect(scrollTop).toBeGreaterThan(0);
+    const copy = preview.copy();
+    const second = copy.copy();
+    try {
+      copy.element.style.maxHeight = "10px";
+      jasmine.attachToDOM(copy.element);
+      await copy.renderMarkdown();
+      expect(copy.element).not.toBe(preview.element);
+      expect(copy.element.scrollTop).toBe(scrollTop);
+      second.element.style.maxHeight = "10px";
+      jasmine.attachToDOM(second.element);
+      await second.renderMarkdown();
+      expect(second.element).not.toBe(copy.element);
+      expect(second.element.scrollTop).toBe(scrollTop);
+      preview.destroy();
+      expect(copy.destroyed).not.toBe(true);
+      await copy.renderMarkdown();
+      expect(copy.element.querySelector(".emoji")).not.toBeNull();
+    } finally {
+      copy.destroy();
+      second.destroy();
+    }
+  });
+
+  it("keeps a viewport changed while a copied preview is finishing its first render", async () => {
+    await preview.renderMarkdown();
+    preview.element.style.maxHeight = "10px";
+    preview.element.scrollTop = 24;
+    let finish;
+    spyOn(renderer, "toDOMFragment").and.callFake(async () => {
+      const fragment = document.createDocumentFragment();
+      const content = document.createElement("div");
+      content.style.height = "1200px";
+      fragment.appendChild(content);
+      return [
+        fragment,
+        () =>
+          new Promise((resolve) => {
+            finish = resolve;
+          }),
+      ];
+    });
+    const copy = preview.copy();
+    try {
+      copy.element.style.maxHeight = "10px";
+      jasmine.attachToDOM(copy.element);
+      const render = copy.renderMarkdown();
+      await conditionPromise(() => Boolean(finish));
+      copy.element.scrollTop = 5;
+      expect(copy.element.scrollTop).toBe(5);
+      finish();
+      await render;
+      expect(copy.element.scrollTop).toBe(5);
+    } finally {
+      finish?.();
+      copy.destroy();
+    }
+  });
+
   describe("::constructor", function () {
     it("shows a loading spinner and renders the markdown", async () => {
       preview.showLoading();
