@@ -7,6 +7,7 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 ## Features
 
 - **Live preview**: renders the active Markdown file and updates as you type.
+- **Editor windows**: keeps selection, scrolling, styling and export dialogs local when a preview is detached.
 - **Split pane**: opens the preview beside the source or in a new tab.
 - **Tree view preview**: opens a preview straight from a Markdown file in the tree view.
 - **HTML export**: copies the rendered HTML to the clipboard or saves it to a file.
