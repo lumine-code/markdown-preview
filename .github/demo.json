@@ -1,0 +1,16 @@
+{
+  "title": "markdown-preview",
+  "description": "Markdown source and rendered preview in adjacent panes.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "bbf12c9c54ee224788683eda22a3f98314241911",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Markdown source and rendered preview in adjacent panes.",
+      "width": 1200,
+      "height": 760
+    }
+  ]
+}

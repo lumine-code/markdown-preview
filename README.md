@@ -15,6 +15,8 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 - **GitHub styling**: optionally renders the preview with GitHub.com styles in light, dark, or system mode.
 - **Zoom controls**: zooms the preview in and out or resets it to the default level.
 
+![Markdown source and rendered preview in adjacent panes.](.github/demo.png)
+
 ## Installation
 
 To install `markdown-preview` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/markdown-preview`.
