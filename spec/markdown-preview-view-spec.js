@@ -138,7 +138,7 @@ describe("MarkdownPreviewView", function () {
           "",
           "## Title",
           "",
-          "[HTML](#hello-world)",
+          "[HTML](#helloworld)",
           "",
           "## Hello<span>world</span>",
           "",
@@ -152,7 +152,7 @@ describe("MarkdownPreviewView", function () {
       const launchLink = preview.element.querySelector('a[href="#-launch"]');
       const launchTarget = preview.element.querySelector("#user-content--launch");
       const titleTarget = preview.element.querySelector("#user-content-title");
-      const htmlTarget = preview.element.querySelector("#user-content-hello-world");
+      const htmlTarget = preview.element.querySelector("#user-content-helloworld");
       const entityLink = preview.element.querySelector('a[href="#caf%C3%A9"]');
       const entityTarget = preview.element.querySelector("#user-content-café");
       spyOn(launchTarget, "scrollIntoView");
@@ -777,7 +777,7 @@ enc\
       // CSS is updated.
       const expectedColors = {
         light: `rgb(31, 35, 40)`,
-        dark: `rgb(230, 237, 243)`,
+        dark: `rgb(240, 246, 252)`,
       };
 
       await preview.renderMarkdown();

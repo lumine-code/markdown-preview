@@ -12,7 +12,7 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 - **Tree view preview**: opens a preview straight from a Markdown file in the tree view.
 - **HTML export**: copies the rendered HTML to the clipboard or saves it to a file.
 - **PDF export**: prints the rendered preview to a PDF, without the surrounding editor.
-- **GitHub styling**: optionally renders the preview with GitHub.com styles in light, dark, or system mode.
+- **GitHub styling**: renders with GitHub.com typography, colors and spacing by default, in light, dark, or system mode.
 - **Zoom controls**: zooms the preview in and out or resets it to the default level.
 
 ![Markdown source and rendered preview in adjacent panes.](.github/demo.png)

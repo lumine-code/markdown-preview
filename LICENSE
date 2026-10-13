@@ -56,7 +56,7 @@ SOFTWARE.
 ----- BEGIN THIRD-PARTY LICENSE: github-markdown-css -----
 Source: https://github.com/sindresorhus/github-markdown-css
 Revision: github-markdown-css@5.9.0 (installed asset generator dependency).
-Imported generated paths: assets/github-markdown-{auto,light,dark}.css and styles/markdown-preview-github.css.
+Imported generated paths: assets/github-markdown-{auto,light,dark}.css, styles/markdown-preview-github.css and spec/fixtures/github-markdown-reference-{light,dark}.css.
 
 MIT License
 

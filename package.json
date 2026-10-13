@@ -56,7 +56,7 @@
     },
     "breakOnSingleNewline": {
       "title": "Break On Single Newline",
-      "description": "In Markdown, a single newline character doesn't cause a line break in the generated HTML. In GitHub Flavored Markdown, that is not true. Enable this config option to insert line breaks in rendered HTML for single newlines in Markdown source.",
+      "description": "Insert line breaks for single newlines. Disabled by default to match Markdown files rendered on GitHub.",
       "type": "boolean",
       "default": false
     },
@@ -82,7 +82,7 @@
       "title": "Use GitHub.com Style",
       "description": "Use the same CSS styles for preview as the ones used on GitHub.com.",
       "type": "boolean",
-      "default": false
+      "default": true
     },
     "gitHubStyleMode": {
       "title": "GitHub.com Style Mode",
