@@ -458,7 +458,7 @@ describe("Markdown Preview", function () {
       ]) {
         const filePath = path.join(lumine.project.getPaths()[0], name);
         const choice = lumine.workspace
-          .getAvailableFileOpeners(filePath)
+          .getAvailablePathOpeners(filePath)
           .find(({ id }) => id === "markdown-preview");
         expect(choice).toBeDefined();
         expect(choice.isDefault).toBe(false);
@@ -466,7 +466,7 @@ describe("Markdown Preview", function () {
       for (const name of ["a.js", "a.mdx", "md"]) {
         expect(
           lumine.workspace
-            .getAvailableFileOpeners(path.join(lumine.project.getPaths()[0], name))
+            .getAvailablePathOpeners(path.join(lumine.project.getPaths()[0], name))
             .some(({ id }) => id === "markdown-preview"),
         ).toBe(false);
       }
