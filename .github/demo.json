@@ -1,16 +1,23 @@
 {
   "title": "markdown-preview",
   "description": "Markdown source and rendered preview in adjacent panes.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "bbf12c9c54ee224788683eda22a3f98314241911",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "abd3f45bcafe8604afade04da08a0b07b9874194",
   "mode": "normal",
   "fontSettings": "default",
+  "themeSourceRevision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
   "images": [
     {
       "file": "demo.png",
-      "label": "Markdown source and rendered preview in adjacent panes.",
+      "label": "Markdown source beside the preview with GitHub light styling.",
       "width": 1200,
-      "height": 760
+      "height": 860
+    },
+    {
+      "file": "demo-2.png",
+      "label": "Markdown source beside the preview with GitHub dark styling.",
+      "width": 1200,
+      "height": 860
     }
   ]
 }

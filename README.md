@@ -15,7 +15,9 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 - **GitHub styling**: renders with GitHub.com typography, colors and spacing by default, in light, dark, or system mode.
 - **Zoom controls**: zooms the preview in and out or resets it to the default level.
 
-![Markdown source and rendered preview in adjacent panes.](.github/demo.png)
+![Markdown source beside the preview with GitHub light styling.](.github/demo.png)
+
+![Markdown source beside the preview with GitHub dark styling.](.github/demo-2.png)
 
 ## Installation
 
