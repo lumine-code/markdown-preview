@@ -8,7 +8,9 @@
           "submenu": [
             {
               "label": "Markdown Preview",
-              "command": "markdown-preview:toggle"
+              "command": "markdown-preview:toggle",
+              "group": "panels",
+              "order": 10
             }
           ]
         }
