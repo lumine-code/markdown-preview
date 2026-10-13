@@ -87,28 +87,6 @@
       {
         "type": "separator"
       }
-    ],
-    ".tree-view .file[data-name$=\".markdown\"], .tree-view .file[data-name$=\".md\"], .tree-view .file[data-name$=\".mdown\"], .tree-view .file[data-name$=\".mkd\"], .tree-view .file[data-name$=\".mkdown\"], .tree-view .file[data-name$=\".ron\"], .tree-view .file[data-name$=\".txt\"]": [
-      {
-        "type": "separator"
-      },
-      {
-        "label": "Markdown Preview",
-        "afterGroupContaining": [
-          "image-editor:open-in-new-tab",
-          "search-panel:project-show-in-current-directory",
-          "open-external:show",
-          "tree-view:open-selected-entry-up",
-          "native-clip:paste",
-          "tree-view:paste",
-          "tree-view:remove",
-          "tree-view:add-file"
-        ],
-        "command": "markdown-preview:preview-file"
-      },
-      {
-        "type": "separator"
-      }
     ]
   }
 }

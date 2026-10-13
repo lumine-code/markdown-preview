@@ -444,75 +444,50 @@ describe("Markdown Preview", function () {
     });
   });
 
-  describe("markdown-preview:preview-file", function () {
-    // The real row builder, so this covers the actual DOM contract rather than
-    // a stand-in that could drift from it.
-    const treeViewPath = lumine.packages.resolvePackagePath("tree-view");
-    const TreeEntry = require(path.join(treeViewPath, "lib", "tree-entry"));
-    const TreeRowView = require(path.join(treeViewPath, "lib", "tree-row-view"));
-    const rowViews = [];
-
-    afterEach(async () => {
-      for (const view of rowViews) view.destroy();
-      rowViews.length = 0;
-    });
-
-    function treeViewRow(name, filePath = path.join(lumine.project.getPaths()[0], name)) {
-      const container = document.createElement("div");
-      container.classList.add("tree-view");
-
-      const treeView = { selectedEntries: new Set() };
-      const entry = new TreeEntry(treeView, {
-        item: {
-          name,
-          path: filePath,
-          status: null,
-          isPathEqual: (other) => other === filePath,
-        },
-        kind: "file",
-      });
-      const view = new TreeRowView(treeView, "file");
-      rowViews.push(view);
-      container.appendChild(view.bind(entry));
-
-      return { row: view.element, nameSpan: view.name };
-    }
-
-    function contextMenuLabels(element) {
-      return lumine.contextMenu.templateForElement(element).map((item) => item.label);
-    }
-
-    it("offers the command anywhere on the row, not just on the file name", async () => {
-      const { row, nameSpan } = treeViewRow("file.md");
-
-      // The bug this guards: the item used to be registered on the span, so it
-      // was absent unless the pointer happened to be over the text itself.
-      expect(contextMenuLabels(row)).toContain("Markdown Preview");
-      expect(contextMenuLabels(nameSpan)).toContain("Markdown Preview");
-    });
-
-    it("offers the command for every previewable extension and no others", async () => {
-      for (const name of ["a.markdown", "a.md", "a.mdown", "a.mkd", "a.mkdown", "a.ron", "a.txt"]) {
-        expect(contextMenuLabels(treeViewRow(name).row)).toContain("Markdown Preview");
+  describe("the Markdown Preview file opener", function () {
+    it("offers a manual choice for each supported extension", () => {
+      for (const name of [
+        "a.markdown",
+        "a.md",
+        "a.mdown",
+        "a.mkd",
+        "a.mkdown",
+        "a.ron",
+        "a.txt",
+        "a.MD",
+      ]) {
+        const filePath = path.join(lumine.project.getPaths()[0], name);
+        const choice = lumine.workspace
+          .getAvailableFileOpeners(filePath)
+          .find(({ id }) => id === "markdown-preview");
+        expect(choice).toBeDefined();
+        expect(choice.isDefault).toBe(false);
       }
       for (const name of ["a.js", "a.mdx", "md"]) {
-        expect(contextMenuLabels(treeViewRow(name).row)).not.toContain("Markdown Preview");
+        expect(
+          lumine.workspace
+            .getAvailableFileOpeners(path.join(lumine.project.getPaths()[0], name))
+            .some(({ id }) => id === "markdown-preview"),
+        ).toBe(false);
       }
     });
 
-    it("previews the row's file when dispatched from the name span inside it", async () => {
+    it("opens the chosen file separately from its text editor and reuses its preview", async () => {
       const filePath = path.join(lumine.project.getPaths()[0], "subdir", "simple.md");
-      const { nameSpan } = treeViewRow("simple.md", filePath);
-
-      // Dispatching from the span is what a real right-click on the text does;
-      // the handler has to read the row that matched, not the click target.
-      lumine.commands.dispatch(nameSpan, "markdown-preview:preview-file");
-
-      await conditionPromise(
-        () => lumine.workspace.getActivePaneItem() instanceof MarkdownPreviewView,
-      );
-
-      expect(lumine.workspace.getActivePaneItem().getPath()).toBe(filePath);
+      const editor = await lumine.workspace.open(filePath);
+      const item = await lumine.workspace.open(filePath, {
+        opener: "markdown-preview",
+        searchAllPanes: true,
+      });
+      expect(item).toBeInstanceOf(MarkdownPreviewView);
+      expect(item.getPath()).toBe(filePath);
+      expect(item.editor).toBe(editor);
+      expect(
+        await lumine.workspace.open(filePath, { opener: "markdown-preview", searchAllPanes: true }),
+      ).toBe(item);
+      expect(
+        await lumine.workspace.open(filePath, { opener: "text-editor", searchAllPanes: true }),
+      ).toBe(editor);
     });
   });
 
