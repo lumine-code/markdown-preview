@@ -1,23 +1,78 @@
 {
   "title": "markdown-preview",
-  "description": "Markdown source and rendered preview in adjacent panes.",
+  "description": "Markdown source beside the preview with GitHub light styling.",
   "recordedOn": "2026-10-14",
-  "sourceRevision": "abd3f45bcafe8604afade04da08a0b07b9874194",
+  "sourceRevision": "1499d8e33ff3875f63f735cac432f581b2ee9fbd",
+  "themeSourceRevision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
   "mode": "normal",
   "fontSettings": "default",
-  "themeSourceRevision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
+  "scenario": "demo.js",
+  "recipeHash": "dad3253c686f3d710fba209727bbdbfee91f7e0d403c0f500cac58ff0c34de6f",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1200, "height": 860 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "b5a8faec3ddaa8afb89b6e46f9e7739baecae91b",
+      "dirty": true,
+      "workingTreeHash": "056fdbeec067f3ed2be83b01f2b7eb42efb19dce777b9b9ef7288c62ff4af80d"
+    },
+    "package": {
+      "revision": "1499d8e33ff3875f63f735cac432f581b2ee9fbd",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "markdown-preview": {
+      "revision": "1499d8e33ff3875f63f735cac432f581b2ee9fbd",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "language-gfm": {
+      "revision": "0b7435801aa225105de22053951b9daf9aefe1a1",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "language-python": {
+      "revision": "41314a0fd1445d4a74e6254e775b3582ad5a8556",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "one-theme": {
+      "revision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "README.md",
+      "sha256": "a16243fb2b21e4620a9e7a93c7526b377d06d6947c1ca897eacacea9a756d232"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "Markdown source beside the preview with GitHub light styling.",
       "width": 1200,
-      "height": 860
+      "height": 860,
+      "sha256": "ae198479ba0e353baaf36447ea5e7ef3db9942ff7210f48d86de8469264be289"
     },
     {
       "file": "demo-2.png",
       "label": "Markdown source beside the preview with GitHub dark styling.",
       "width": 1200,
-      "height": 860
+      "height": 860,
+      "sha256": "58d1141da5a0ca844365e3cb7275bffc61c165b7fa99fddbd67d76b0d4f09ade"
     }
   ]
 }
