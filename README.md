@@ -41,7 +41,7 @@ Commands available in `.markdown-preview`:
 - `markdown-preview:zoom-out`: zoom the preview out,
 - `markdown-preview:reset-zoom`: reset the preview zoom to the default level.
 
-Use **Open With…** in the tree view to choose Markdown Preview for a file.
+Use **Open…** in the tree view to choose Markdown Preview for a file.
 
 ## Customization
 
