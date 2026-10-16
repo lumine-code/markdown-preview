@@ -30,4 +30,19 @@ describe("Markdown Preview application menu context", () => {
     lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
     expect(lumine.notifications.addWarning).not.toHaveBeenCalled();
   });
+  it("dispatches once when a preview contains an embedded editor", () => {
+    const preview = document.createElement("div");
+    preview.className = "markdown-preview";
+    const editor = lumine.workspace.buildTextEditor();
+    preview.appendChild(editor.element);
+    jasmine.attachToDOM(preview);
+    const toggle = spyOn(main, "toggle");
+    try {
+      lumine.commands.dispatch(editor.element, "markdown-preview:toggle");
+      expect(toggle).toHaveBeenCalledTimes(1);
+    } finally {
+      editor.destroy();
+      preview.remove();
+    }
+  });
 });

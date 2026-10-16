@@ -25,7 +25,7 @@ To install `markdown-preview` search for it in the Install pane of the Lumine se
 
 ## Commands
 
-Commands available in `lumine-text-editor:not([mini]), .markdown-preview`:
+Commands available in `lumine-text-editor:not([mini]):not(.markdown-preview lumine-text-editor)` and `.markdown-preview`:
 
 - `markdown-preview:toggle`: open or close the preview for the current editor,
 - `markdown-preview:save-as-html`: save the rendered HTML to a file,
