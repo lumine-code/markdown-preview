@@ -25,6 +25,17 @@ describe("Markdown Preview application menu context", () => {
     ).toBe(true);
   });
 
+  it("checks the configured grammar without initializing a preview", async () => {
+    const editor = await lumine.workspace.open();
+    const changed = spyOn(lumine.commands, "invalidateAvailability").and.callThrough();
+    lumine.config.set("markdown-preview.grammars", []);
+    expect(lumine.commands.canDispatch(editor.getElement(), "markdown-preview:toggle")).toBe(false);
+    lumine.config.set("markdown-preview.grammars", [editor.getGrammar().scopeName]);
+    expect(lumine.commands.canDispatch(editor.getElement(), "markdown-preview:toggle")).toBe(true);
+    expect(changed).toHaveBeenCalled();
+    editor.destroy();
+  });
+
   it("stays quiet when there is no active pane item", () => {
     spyOn(main, "commandContext").and.returnValue({ item: null, editor: null });
     lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
@@ -37,6 +48,7 @@ describe("Markdown Preview application menu context", () => {
     preview.appendChild(editor.element);
     jasmine.attachToDOM(preview);
     const toggle = spyOn(main, "toggle");
+    lumine.config.set("markdown-preview.grammars", [editor.getGrammar().scopeName]);
     try {
       lumine.commands.dispatch(editor.element, "markdown-preview:toggle");
       expect(toggle).toHaveBeenCalledTimes(1);

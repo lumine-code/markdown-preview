@@ -411,7 +411,7 @@ describe("Markdown Preview", function () {
       await lumine.workspace.open("code-block.md");
     });
 
-    it("is available only from its editor or preview scope", async () => {
+    it("requires its editor or preview scope and a configured grammar", async () => {
       lumine.config.set("markdown-preview.grammars", ["source.weird-md"]);
       const commands = lumine.commands
         .findCommands({ target: lumine.workspace.getElement() })
@@ -422,7 +422,7 @@ describe("Markdown Preview", function () {
           lumine.workspace.getActiveTextEditor().element,
           "markdown-preview:toggle",
         ),
-      ).toBe(true);
+      ).toBe(false);
     });
 
     it("previews an editor whose grammar is in `markdown-preview.grammars`", async () => {
@@ -438,7 +438,7 @@ describe("Markdown Preview", function () {
       ).toBe(true);
     });
 
-    it("says why it declined when the grammar is not in the list", async () => {
+    it("disables dispatch when the grammar is not in the list", async () => {
       lumine.config.set("markdown-preview.grammars", ["source.weird-md"]);
       const warnings = [];
       lumine.notifications.onDidAddNotification((notification) => warnings.push(notification));
@@ -448,8 +448,7 @@ describe("Markdown Preview", function () {
         "markdown-preview:toggle",
       );
 
-      expect(warnings.length).toBe(1);
-      expect(warnings[0].getType()).toBe("warning");
+      expect(warnings.length).toBe(0);
     });
   });
 
