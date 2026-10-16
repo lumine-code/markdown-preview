@@ -25,12 +25,18 @@ To install `markdown-preview` search for it in the Install pane of the Lumine se
 
 ## Commands
 
-Commands available in `lumine-workspace`. The first four act on the active editor and decline with a notification when its grammar is not in the `markdown-preview.grammars` list:
+Commands available in `lumine-text-editor:not([mini]), .markdown-preview`:
 
 - `markdown-preview:toggle`: open or close the preview for the current editor,
-- `markdown-preview:copy-html`: copy the rendered HTML to the clipboard,
 - `markdown-preview:save-as-html`: save the rendered HTML to a file,
-- `markdown-preview:export-to-pdf`: export the rendered preview to a PDF file,
+- `markdown-preview:export-to-pdf`: export the rendered preview to a PDF file.
+
+Commands available in `lumine-text-editor:not([mini])`:
+
+- `markdown-preview:copy-html`: copy the rendered HTML to the clipboard.
+
+Commands available in `lumine-workspace`:
+
 - `markdown-preview:toggle-break-on-single-newline`: toggle line breaks on single newlines,
 - `markdown-preview:toggle-github-style`: toggle the GitHub.com preview style.
 

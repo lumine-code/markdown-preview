@@ -10,12 +10,19 @@ describe("Markdown Preview application menu context", () => {
     await lumine.packages.deactivatePackage("markdown-preview");
   });
 
-  it("explains why a non-editor pane item has no Markdown preview", () => {
-    spyOn(main, "commandContext").and.returnValue({ item: {}, editor: null });
+  it("disables document actions outside an editor or preview", () => {
+    const context = spyOn(main, "commandContext").and.returnValue({ item: {}, editor: null });
     lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
-    expect(lumine.notifications.addWarning).toHaveBeenCalledOnceWith(
-      "Activate a Markdown source file before opening its preview.",
-    );
+    expect(
+      lumine.commands.canDispatch(lumine.workspace.getElement(), "markdown-preview:toggle"),
+    ).toBe(false);
+    expect(context).not.toHaveBeenCalled();
+    expect(
+      lumine.commands.canDispatch(
+        lumine.workspace.getElement(),
+        "markdown-preview:toggle-github-style",
+      ),
+    ).toBe(true);
   });
 
   it("stays quiet when there is no active pane item", () => {

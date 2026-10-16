@@ -411,20 +411,26 @@ describe("Markdown Preview", function () {
       await lumine.workspace.open("code-block.md");
     });
 
-    // The command is registered once, on the workspace, so that Packages >
-    // Markdown Preview works when focus is anywhere. The grammar list decides
-    // what the command does, not whether it can be dispatched.
-    it("exists whatever the active editor's grammar is", async () => {
+    it("is available only from its editor or preview scope", async () => {
       lumine.config.set("markdown-preview.grammars", ["source.weird-md"]);
       const commands = lumine.commands
         .findCommands({ target: lumine.workspace.getElement() })
         .map((command) => command.name);
-      expect(commands).toContain("markdown-preview:toggle");
+      expect(commands).not.toContain("markdown-preview:toggle");
+      expect(
+        lumine.commands.canDispatch(
+          lumine.workspace.getActiveTextEditor().element,
+          "markdown-preview:toggle",
+        ),
+      ).toBe(true);
     });
 
     it("previews an editor whose grammar is in `markdown-preview.grammars`", async () => {
       lumine.config.set("markdown-preview.grammars", ["source.gfm"]);
-      lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
+      lumine.commands.dispatch(
+        lumine.workspace.getActiveTextEditor().element,
+        "markdown-preview:toggle",
+      );
 
       await conditionPromise(() => lumine.workspace.getCenter().getPanes()[1]?.getActiveItem());
       expect(
@@ -437,7 +443,10 @@ describe("Markdown Preview", function () {
       const warnings = [];
       lumine.notifications.onDidAddNotification((notification) => warnings.push(notification));
 
-      lumine.commands.dispatch(lumine.workspace.getElement(), "markdown-preview:toggle");
+      lumine.commands.dispatch(
+        lumine.workspace.getActiveTextEditor().element,
+        "markdown-preview:toggle",
+      );
 
       expect(warnings.length).toBe(1);
       expect(warnings[0].getType()).toBe("warning");
