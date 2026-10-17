@@ -3,28 +3,35 @@
 /* These are the default Markdown Preview styles.
    They use the syntax variables to adapt to the color scheme of syntax themes. */
 
-/* The Less version derived several colors with contrast(): it nudged the
-   derived color toward or away from the syntax palette depending on whether
-   the theme is light or dark. That decision is baked per bundled palette
-   below: the defaults resolve the light-theme branch (which also matches the
-   base-variables fallback palette), and the one-night override switches every
-   derived color to the dark-theme branch. */
+/* Derive document surfaces from the syntax pair itself. UI and syntax themes
+   can be selected independently, so a UI theme name cannot choose this palette. */
 
 .markdown-preview:not([data-use-github-style]) {
   /* Package-local values (converted from Less variables) */
   --markdown-preview-fg: var(--syntax-text-color);
   --markdown-preview-bg: var(--syntax-background-color);
   --markdown-preview-fg-accent: var(--syntax-cursor-color);
-  /* contrast(@bg, darken(@fg, 32%), lighten(@fg, 32%)) */
-  --markdown-preview-fg-strong: hsl(from var(--markdown-preview-fg) h s calc(l - 32));
-  /* contrast(@fg, lighten(@fg, 16%), darken(@fg, 16%)) */
-  --markdown-preview-fg-subtle: hsl(from var(--markdown-preview-fg) h s calc(l + 16));
-  /* contrast(@bg, lighten(@bg, 16%), darken(@bg, 16%)) */
-  --markdown-preview-border: hsl(from var(--markdown-preview-bg) h s calc(l - 16));
-  /* contrast(@bg, lighten(@bg, 8%), darken(@bg, 6%)) */
-  --markdown-preview-code-bg: hsl(from var(--markdown-preview-bg) h s calc(l - 6));
-  /* contrast(@bg, lighten(@bg, 4%), darken(@bg, 4%)) */
-  --markdown-preview-editor-bg: hsl(from var(--markdown-preview-bg) h s calc(l - 4));
+  --markdown-preview-fg-strong: var(--markdown-preview-fg);
+  --markdown-preview-fg-subtle: color-mix(
+    in srgb,
+    var(--markdown-preview-fg) 85%,
+    var(--markdown-preview-bg)
+  );
+  --markdown-preview-border: color-mix(
+    in srgb,
+    var(--markdown-preview-fg) 20%,
+    var(--markdown-preview-bg)
+  );
+  --markdown-preview-code-bg: color-mix(
+    in srgb,
+    var(--markdown-preview-fg) 6%,
+    var(--markdown-preview-bg)
+  );
+  --markdown-preview-editor-bg: color-mix(
+    in srgb,
+    var(--markdown-preview-fg) 4%,
+    var(--markdown-preview-bg)
+  );
   --markdown-preview-margin: 1.5em;
 
   padding: 2em;
@@ -170,13 +177,4 @@
     border-bottom: 2px solid hsl(from var(--markdown-preview-border) h s calc(l - 6));
     background-color: var(--markdown-preview-code-bg);
   }
-}
-
-/* Dark-theme branch of the contrast() calls above. */
-:where(.theme-one-night-ui) .markdown-preview:not([data-use-github-style]) {
-  --markdown-preview-fg-strong: hsl(from var(--markdown-preview-fg) h s calc(l + 32));
-  --markdown-preview-fg-subtle: hsl(from var(--markdown-preview-fg) h s calc(l - 16));
-  --markdown-preview-border: hsl(from var(--markdown-preview-bg) h s calc(l + 16));
-  --markdown-preview-code-bg: hsl(from var(--markdown-preview-bg) h s calc(l + 8));
-  --markdown-preview-editor-bg: hsl(from var(--markdown-preview-bg) h s calc(l + 4));
 }
