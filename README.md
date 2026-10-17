@@ -20,6 +20,10 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 
 ![Markdown source beside the preview with GitHub dark styling.](.github/demo-2.png)
 
+![Markdown source beside a preview that follows the light syntax palette.](.github/demo-3.png)
+
+![Markdown source beside a preview that follows the dark syntax palette.](.github/demo-4.png)
+
 ## Installation
 
 To install `markdown-preview` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/markdown-preview`.
