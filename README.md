@@ -13,6 +13,7 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/m
 - **HTML export**: copies the rendered HTML to the clipboard or saves it to a file.
 - **PDF export**: prints the rendered preview to a PDF, without the surrounding editor.
 - **GitHub styling**: renders with GitHub.com typography, colors and spacing by default, in light, dark, or system mode.
+- **Syntax styling**: follows the active syntax palette when GitHub styling is disabled, independently of the UI theme.
 - **Zoom controls**: zooms the preview in and out or resets it to the default level.
 
 ![Markdown source beside the preview with GitHub light styling.](.github/demo.png)
