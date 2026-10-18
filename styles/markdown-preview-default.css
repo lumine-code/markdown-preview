@@ -3,35 +3,25 @@
 /* These are the default Markdown Preview styles.
    They use the syntax variables to adapt to the color scheme of syntax themes. */
 
-/* Derive document surfaces from the syntax pair itself. UI and syntax themes
-   can be selected independently, so a UI theme name cannot choose this palette. */
+/* Keep the original light/dark offsets, selected from the syntax colors
+   themselves. UI theme names cannot determine the document's palette. */
 
 .markdown-preview:not([data-use-github-style]) {
   /* Package-local values (converted from Less variables) */
   --markdown-preview-fg: var(--syntax-text-color);
   --markdown-preview-bg: var(--syntax-background-color);
   --markdown-preview-fg-accent: var(--syntax-cursor-color);
-  --markdown-preview-fg-strong: var(--markdown-preview-fg);
-  --markdown-preview-fg-subtle: color-mix(
-    in srgb,
-    var(--markdown-preview-fg) 85%,
-    var(--markdown-preview-bg)
+  --markdown-preview-fg-strong: hsl(
+    from var(--markdown-preview-fg) h s calc(l + 32 * sign(l - 50))
   );
-  --markdown-preview-border: color-mix(
-    in srgb,
-    var(--markdown-preview-fg) 20%,
-    var(--markdown-preview-bg)
+  --markdown-preview-fg-subtle: hsl(
+    from var(--markdown-preview-fg) h s calc(l - 16 * sign(l - 50))
   );
-  --markdown-preview-code-bg: color-mix(
-    in srgb,
-    var(--markdown-preview-fg) 6%,
-    var(--markdown-preview-bg)
+  --markdown-preview-border: hsl(from var(--markdown-preview-bg) h s calc(l + 16 * sign(50 - l)));
+  --markdown-preview-code-bg: hsl(
+    from var(--markdown-preview-bg) h s calc(l + 1 + 7 * sign(50 - l))
   );
-  --markdown-preview-editor-bg: color-mix(
-    in srgb,
-    var(--markdown-preview-fg) 4%,
-    var(--markdown-preview-bg)
-  );
+  --markdown-preview-editor-bg: hsl(from var(--markdown-preview-bg) h s calc(l + 4 * sign(50 - l)));
   --markdown-preview-margin: 1.5em;
 
   padding: 2em;
