@@ -54,6 +54,12 @@ Commands available in `.markdown-preview`:
 
 Use **Open…** in the tree view to choose Markdown Preview for a file.
 
+## Usage
+
+Click a file link such as `[Related document](related.md)` in the preview to open the existing file in the editor. Relative paths resolve from the Markdown document's directory. Inline and reference links support encoded filenames; URL queries and fragments are excluded from the target filename. Links beginning with `#` scroll within the preview.
+
+Relative file links work with the default settings. Explicit `file://` URLs and absolute Windows paths require **Allow Unsafe Protocols**. Prefer relative links when sharing documentation.
+
 ## Customization
 
 Adjust the preview's typography by adding CSS to your `styles.css`:
