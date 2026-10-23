@@ -606,10 +606,7 @@ world\
       );
       await expectPreviewInSplitPane();
 
-      expect(preview.element.innerHTML).toBe(`\
-<p>content
-</p>\
-`);
+      expect(preview.element.innerHTML).toBe("<p>content</p>");
     });
   });
 
