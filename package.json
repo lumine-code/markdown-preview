@@ -172,7 +172,7 @@
     "eslint-plugin-n": "^18.5.0",
     "github-markdown-css": "^5.9.0",
     "globals": "^17.13.0",
-    "language-ruby": "github:lumine-code/language-ruby#9c180ffd83b88d0cd8e5dfa46005a7f4a55a33d7",
+    "language-ruby": "github:lumine-code/language-ruby#9923c20df2d6db6245187c41980a45a1f01a7bf7",
     "prettier": "^3.9.10"
   }
 }
