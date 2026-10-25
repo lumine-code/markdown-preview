@@ -176,6 +176,7 @@ describe("Markdown renderer sanitized DOM", () => {
 
   it("keeps fenced code unwrapped and hides invisibles while style toggles reuse its editor", async () => {
     jasmine.useRealClock();
+    await lumine.packages.activatePackage("language-text");
     spyOn(lumine.packages, "hasActivatedInitialPackages").and.returnValue(true);
     lumine.config.set("editor.tabLength", 2);
     lumine.config.set("editor.showInvisibles", true);

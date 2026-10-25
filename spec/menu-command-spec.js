@@ -2,6 +2,7 @@ describe("Markdown Preview application menu context", () => {
   let main;
 
   beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
     main = (await lumine.packages.activatePackage("markdown-preview")).mainModule;
     spyOn(lumine.notifications, "addWarning");
   });

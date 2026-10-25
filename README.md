@@ -60,6 +60,8 @@ Click a file link such as `[Related document](related.md)` in the preview to ope
 
 Relative file links work with the default settings. Explicit `file://` URLs and absolute Windows paths require **Allow Unsafe Protocols**. Prefer relative links when sharing documentation.
 
+Choosing None as the source editor's grammar pauses its preview and releases syntax highlighting resources. Selecting a grammar resumes rendering with the current source.
+
 ## Customization
 
 Adjust the preview's typography by adding CSS to your `styles.css`:

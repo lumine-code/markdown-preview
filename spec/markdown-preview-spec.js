@@ -65,6 +65,7 @@ describe("Markdown Preview", function () {
 
     describe("when the editor does not have a path", function () {
       it("splits the current pane to the right with a markdown preview for the file", async () => {
+        await lumine.packages.activatePackage("language-text");
         await lumine.workspace.open("");
         lumine.commands.dispatch(
           lumine.workspace.getActiveTextEditor().getElement(),
