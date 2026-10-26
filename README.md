@@ -64,6 +64,8 @@ Choosing None as the source editor's grammar pauses its preview and releases syn
 
 ## Customization
 
+Preview and HTML conversion accept up to 2 Mi UTF-16 units of Markdown, checked before reading editor contents or passing text to a parser. Files are decoded incrementally under the same budget. Generated HTML is limited to 8 Mi UTF-16 units and 100,000 markup tokens before DOM construction. An exceeded limit is reported without truncating the source, and a smaller source can resume previewing. Code blocks above 65,536 units or 2,000 lines, and blocks beyond the first 128 highlighted blocks, retain their complete plain text without creating embedded syntax editors.
+
 Adjust the preview's typography by adding CSS to your `styles.css`:
 
 ```css
