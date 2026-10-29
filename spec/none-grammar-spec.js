@@ -49,25 +49,31 @@ describe("Markdown previews with no source grammar", () => {
   });
 
   it("cancels an in-flight render when None is selected", async () => {
-    let finish, signal;
+    const requests = [];
     spyOn(renderer, "toDOMFragment").and.callFake((_text, _path, _grammar, _cache, options) => {
-      signal = options.signal;
       return new Promise((resolve) => {
-        finish = () => {
-          const fragment = document.createDocumentFragment();
-          const heading = document.createElement("h1");
-          heading.textContent = "Obsolete render";
-          fragment.appendChild(heading);
-          resolve([fragment, () => Promise.resolve()]);
-        };
+        requests.push({
+          signal: options.signal,
+          finish() {
+            const fragment = document.createDocumentFragment();
+            const heading = document.createElement("h1");
+            heading.textContent = "Obsolete render";
+            fragment.appendChild(heading);
+            resolve([fragment, () => Promise.resolve()]);
+          },
+        });
       });
     });
-    const pending = preview.renderMarkdown();
-    await conditionPromise(() => Boolean(finish));
+    const pending = [preview.renderMarkdown()];
+    await conditionPromise(() => requests.length > 0);
+    pending.push(preview.renderMarkdown());
+    await conditionPromise(() => requests.length > 1);
     lumine.grammars.assignGrammar(editor, lumine.grammars.nullGrammar);
-    expect(signal.aborted).toBe(true);
-    finish();
-    await pending;
+    for (const request of requests) {
+      expect(request.signal.aborted).toBe(true);
+      request.finish();
+    }
+    await Promise.all(pending);
     expect(preview.element.textContent).toContain("Preview paused.");
     expect(preview.element.textContent).not.toContain("Obsolete render");
   });
