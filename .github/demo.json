@@ -1,9 +1,9 @@
 {
   "title": "markdown-preview",
   "description": "Markdown source beside the preview with GitHub light styling.",
-  "recordedOn": "2026-10-17",
-  "sourceRevision": "229e5df3b069f34c76e025a99e84b4da62f30ea7",
-  "themeSourceRevision": "80e8864a2e9a891ef1f911d78ab8f03fb3911f58",
+  "recordedOn": "2026-10-29",
+  "sourceRevision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
+  "themeSourceRevision": "543b6786cc6eed20334c381eb322fc06e00a67b0",
   "mode": "normal",
   "fontSettings": "default",
   "scenario": "demo.js",
@@ -11,8 +11,8 @@
   "environment": {
     "platform": "win32",
     "arch": "x64",
-    "electron": "44.9.0",
-    "chrome": "152.0.7977.167",
+    "electron": "45.0.0",
+    "chrome": "156.0.8078.48",
     "devicePixelRatio": 1,
     "locale": "en-GB",
     "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
@@ -24,32 +24,32 @@
   "privacy": { "version": 1, "location": "neutral", "textChecked": true },
   "sources": {
     "editor": {
-      "revision": "200598247a0ae40f5e0bf1998b44f7fe77bc0aa7",
+      "revision": "ad89c254a9f9e4c07ffbf5bc471030dbfb22b127",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "package": {
-      "revision": "229e5df3b069f34c76e025a99e84b4da62f30ea7",
+      "revision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "markdown-preview": {
-      "revision": "229e5df3b069f34c76e025a99e84b4da62f30ea7",
+      "revision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "language-gfm": {
-      "revision": "2220adaf1ebdc993a9316394d2cc1be6b48fa1ff",
+      "revision": "e2eca2b15d854161c670e5b8815ad48e636957b7",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "language-python": {
-      "revision": "cad3cc51c11fc557f2c7b2100c54a29730378c63",
+      "revision": "413b30e96e3bb63714958c3e3edeca338b0551aa",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "one-theme": {
-      "revision": "80e8864a2e9a891ef1f911d78ab8f03fb3911f58",
+      "revision": "543b6786cc6eed20334c381eb322fc06e00a67b0",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     }
@@ -66,28 +66,28 @@
       "label": "Markdown source beside the preview with GitHub light styling.",
       "width": 1200,
       "height": 860,
-      "sha256": "3cdb73877a6e1e12a5bd5d93a5a56e78a9ada349fdb0f3842939f75cac45e11b"
+      "sha256": "d0ec454a37a47076daad9eeee707aefeeb38dc80111ed553246287e66f841b45"
     },
     {
       "file": "demo-2.png",
       "label": "Markdown source beside the preview with GitHub dark styling.",
       "width": 1200,
       "height": 860,
-      "sha256": "761f397d75a8dfd03166e455a7585d747bc2c818b8ac4a063c8b91e999404b6a"
+      "sha256": "930aa787b74d4be7d93a4ae1b115f390d00d094d0ed78baed19b531aff656e19"
     },
     {
       "file": "demo-3.png",
       "label": "Markdown source beside a preview that follows the light syntax palette.",
       "width": 1200,
       "height": 860,
-      "sha256": "2e35f3186020a35dc41389e0842a56cb720af75b73a73d4332f70dec967673e3"
+      "sha256": "073e6d1b4389a0c5db9476deb7ec886efc99e3d122c3fe30c6c843dede7767bb"
     },
     {
       "file": "demo-4.png",
       "label": "Markdown source beside a preview that follows the dark syntax palette.",
       "width": 1200,
       "height": 860,
-      "sha256": "49b711d94c834c4cf878aa25add52b36f864f8f88fae0e60886dc6de1a5c51a4"
+      "sha256": "2a0138e02209e885ee5cb683b2a5aef1e23b12243f4c5422f4461a218e91e1e1"
     }
   ]
 }
