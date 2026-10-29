@@ -2,7 +2,7 @@
   "title": "markdown-preview",
   "description": "Markdown source beside the preview with GitHub light styling.",
   "recordedOn": "2026-10-29",
-  "sourceRevision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
+  "sourceRevision": "cc29c1fb646c8f6152a4fb1e6d38f028546fb0e5",
   "themeSourceRevision": "543b6786cc6eed20334c381eb322fc06e00a67b0",
   "mode": "normal",
   "fontSettings": "default",
@@ -24,17 +24,17 @@
   "privacy": { "version": 1, "location": "neutral", "textChecked": true },
   "sources": {
     "editor": {
-      "revision": "ad89c254a9f9e4c07ffbf5bc471030dbfb22b127",
+      "revision": "b569c426733b65e6e7ea16b00430f701a289996e",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "package": {
-      "revision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
+      "revision": "cc29c1fb646c8f6152a4fb1e6d38f028546fb0e5",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "markdown-preview": {
-      "revision": "06705a4fa965fefed66069ccced4a2946ac7b4ef",
+      "revision": "cc29c1fb646c8f6152a4fb1e6d38f028546fb0e5",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
@@ -66,28 +66,28 @@
       "label": "Markdown source beside the preview with GitHub light styling.",
       "width": 1200,
       "height": 860,
-      "sha256": "d0ec454a37a47076daad9eeee707aefeeb38dc80111ed553246287e66f841b45"
+      "sha256": "580932e459f8c0d3a20bb92d4e306bda2e56a0d79e263d5c27aab128754be53c"
     },
     {
       "file": "demo-2.png",
       "label": "Markdown source beside the preview with GitHub dark styling.",
       "width": 1200,
       "height": 860,
-      "sha256": "930aa787b74d4be7d93a4ae1b115f390d00d094d0ed78baed19b531aff656e19"
+      "sha256": "ea62f5ee7220afd9e22e74a4fd2fd033eed2f5ccba446952098b6b88eed9f595"
     },
     {
       "file": "demo-3.png",
       "label": "Markdown source beside a preview that follows the light syntax palette.",
       "width": 1200,
       "height": 860,
-      "sha256": "073e6d1b4389a0c5db9476deb7ec886efc99e3d122c3fe30c6c843dede7767bb"
+      "sha256": "70b1881bcaea7a9b41b3338e0465fcf4b2d51063136eff47593ebe2c09ce6943"
     },
     {
       "file": "demo-4.png",
       "label": "Markdown source beside a preview that follows the dark syntax palette.",
       "width": 1200,
       "height": 860,
-      "sha256": "2a0138e02209e885ee5cb683b2a5aef1e23b12243f4c5422f4461a218e91e1e1"
+      "sha256": "1f0fa28d61a8015d65f52734da77b46811be0abba20c7e081dfb47b0ae92e75f"
     }
   ]
 }
