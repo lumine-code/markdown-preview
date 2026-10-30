@@ -19,20 +19,6 @@
 
   lumine-text-editor {
     user-select: auto;
-
-    /* only show scrollbars on hover */
-    .scrollbars-visible-always & {
-      .vertical-scrollbar,
-      .horizontal-scrollbar {
-        visibility: hidden;
-      }
-    }
-    .scrollbars-visible-always &:hover {
-      .vertical-scrollbar,
-      .horizontal-scrollbar {
-        visibility: visible;
-      }
-    }
   }
 
   /* move task list checkboxes */
