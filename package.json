@@ -171,7 +171,7 @@
     "eslint-plugin-n": "^18.5.0",
     "github-markdown-css": "^5.9.0",
     "globals": "^17.14.0",
-    "language-ruby": "github:lumine-code/language-ruby#7e715421917ff92f18756e0e933d1e6df262f653",
+    "language-ruby": "github:lumine-code/language-ruby#f2d13ff3e768fa1e316f63bdee096ad81154c0d4",
     "prettier": "^3.9.10"
   },
   "overrides": {
