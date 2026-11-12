@@ -172,14 +172,14 @@
     "github-markdown-css": "^5.9.0",
     "globals": "^17.14.0",
     "language-ruby": "github:lumine-code/language-ruby#520cf2c4df0a3ada2b2e0f5ff96b9104c6c11bbf",
-    "prettier": "^3.9.10"
+    "prettier": "^3.10.0"
   },
   "overrides": {
     "eslint@^10.14.0": {
-      "minimatch": "11.0.5"
+      "minimatch": "11.0.8"
     },
     "@eslint/config-array@0.23.5": {
-      "minimatch": "11.0.5"
+      "minimatch": "11.0.8"
     }
   }
 }
