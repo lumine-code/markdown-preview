@@ -172,7 +172,7 @@
     "github-markdown-css": "^5.9.0",
     "globals": "^17.14.0",
     "language-ruby": "github:lumine-code/language-ruby#9d55866512cd9693f84fd2b86d1fcf83645c4f94",
-    "prettier": "^3.10.0"
+    "prettier": "^3.10.1"
   },
   "overrides": {
     "eslint@^10.14.0": {
