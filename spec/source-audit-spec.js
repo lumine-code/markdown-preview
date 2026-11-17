@@ -33,6 +33,21 @@ describe("Markdown source and syntax mapping audit", () => {
     expect(helper.scopeForFenceName("js")).toBe(shipped);
     expect(helper.scopeForFenceName("private-audit")).toBe("source.private-audit");
   });
+  it("keeps a language mapping failure literal below its notification heading", () => {
+    const message = String.raw`Cannot read C:\Projects\[demo]\_mapping <unknown>`;
+    const error = new Error(message);
+    const originalGet = lumine.config.get.bind(lumine.config);
+    spyOn(lumine.config, "get").and.callFake((key, ...args) => {
+      if (key === "markdown-preview.customSyntaxHighlightingLanguageIdentifiers") throw error;
+      return originalGet(key, ...args);
+    });
+    const notify = spyOn(lumine.notifications, "addError");
+    expect(helper.scopeForFenceName("js")).toBe(shipped.js);
+    expect(notify).toHaveBeenCalledOnceWith(
+      "Unable to load custom syntax highlighting language identifiers",
+      { detail: error.toString() },
+    );
+  });
   it("renders a valid null-valued YAML field without failing the complete document", async () => {
     const html = await renderer.toHTML("---\nnullable: null\n---\n# Body", __filename);
     const element = document.createElement("div");
