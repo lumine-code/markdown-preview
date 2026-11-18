@@ -48,6 +48,31 @@ describe("Markdown renderer GitHub alerts", () => {
         expect(fragment.querySelector("blockquote")).toBeNull();
       });
 
+      it("recognizes escaped, entity-encoded, and raw HTML alert markers", async () => {
+        const markdown = [
+          "> \\[!NOTE]\n> Escaped marker.",
+          "> &#91;!TIP]\n> Encoded marker.",
+          "<blockquote><p>[!IMPORTANT]<br><strong>HTML with a line break.</strong></p></blockquote>",
+          "<blockquote><p>[!WARNING]\nHTML with a newline.</p></blockquote>",
+        ].join("\n\n");
+        const fragment = await render(markdown);
+
+        const alerts = [...fragment.querySelectorAll("div.markdown-alert")];
+        expect(alerts.map((alert) => alert.className)).toEqual([
+          "markdown-alert markdown-alert-note",
+          "markdown-alert markdown-alert-tip",
+          "markdown-alert markdown-alert-important",
+          "markdown-alert markdown-alert-warning",
+        ]);
+        expect(alerts.map((alert) => alert.children[1]?.innerHTML)).toEqual([
+          "Escaped marker.",
+          "Encoded marker.",
+          "<strong>HTML with a line break.</strong>",
+          "HTML with a newline.",
+        ]);
+        expect(fragment.querySelector("blockquote")).toBeNull();
+      });
+
       it("preserves rendered alert content in the preview and HTML output", async () => {
         lumine.config.set("markdown-preview.useGitHubStyle", false);
         const markdown = [
@@ -106,10 +131,9 @@ describe("Markdown renderer GitHub alerts", () => {
           "",
           "> [!NOTE] Text on the marker line.",
           "",
-          "> [!NOTE]",
+          "> [!NOTE] **Formatted text on the marker line.**",
           "",
-          "> \\[!NOTE]",
-          "> Escaped marker.",
+          "> [!NOTE]",
           "",
           "> `[!NOTE]`",
           "",
@@ -127,8 +151,8 @@ describe("Markdown renderer GitHub alerts", () => {
           "[!UNKNOWN]\nUnknown type.",
           "Quoted introduction.\n[!NOTE]",
           "[!NOTE] Text on the marker line.",
+          "[!NOTE] Formatted text on the marker line.",
           "[!NOTE]",
-          "[!NOTE]\nEscaped marker.",
           "[!NOTE]",
         ]);
         expect(fragment.querySelector("blockquote code")?.textContent).toBe("[!NOTE]");
