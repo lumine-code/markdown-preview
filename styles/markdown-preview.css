@@ -8,6 +8,11 @@
     vertical-align: baseline;
   }
 
+  .markdown-alert-title > .markdown-alert-icon {
+    flex: none;
+    margin-inline-end: 0.5em;
+  }
+
   /* Hide a `pre` that comes directly after an `lumine-text-editor` because the
      `lumine-text-editor` is the syntax-highlighted representation.
 

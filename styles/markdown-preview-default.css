@@ -120,6 +120,27 @@
     border-width: 4px;
   }
 
+  .markdown-alert {
+    margin: var(--markdown-preview-margin) 0;
+    padding: 0.5em 1em;
+    border-inline-start: 4px solid var(--markdown-preview-fg-accent);
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    > .markdown-alert-title {
+      display: flex;
+      align-items: center;
+      color: var(--markdown-preview-fg-strong);
+      font-weight: 600;
+    }
+  }
+
   /* HR -------------------- */
 
   hr {
