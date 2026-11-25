@@ -152,8 +152,8 @@
     }
   },
   "dependencies": {
-    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#f538de49aa4c1c810e53f104845d55d9578a8c74",
-    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#b43aecd8dcd6db42b8a0cd4839b10e66ba9e452a",
+    "@lumine-code/fs-plus": "github:lumine-code/fs-plus#d9b86ac6fda3421659d3585b3a21df76014d41a9",
+    "@lumine-code/underscore-plus": "github:lumine-code/underscore-plus#598abf858c33e631f2cf3c6709e80703376df799",
     "dompurify": "^3.5.0",
     "emoji-images": "^0.1.1",
     "github-slugger": "^2.0.0",
@@ -164,14 +164,14 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@lumine-code/fs-temp": "github:lumine-code/fs-temp#26eaeb8be8bc3a42de80a06b07c9108944e3a57f",
+    "@lumine-code/fs-temp": "github:lumine-code/fs-temp#451a932d0abc306a760884156bd2d4ae3f10e93e",
     "dedent": "^1.7.2",
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.6.0",
     "github-markdown-css": "^5.9.0",
     "globals": "^17.14.0",
-    "language-ruby": "github:lumine-code/language-ruby#73850bac27331f200593fe1e9631034aad22a7ae",
+    "language-ruby": "github:lumine-code/language-ruby#f6b72464d52ae620d78e78cb5052726522130872",
     "prettier": "^3.10.1"
   },
   "overrides": {
